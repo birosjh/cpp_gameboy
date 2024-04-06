@@ -20,7 +20,7 @@ cmake --build build
 Run the built code
 
 ```bash
-build/gameboy
+build/src/gameboy
 ```
 
 
