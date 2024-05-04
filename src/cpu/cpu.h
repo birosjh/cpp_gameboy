@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-class Registers {
+class CPU {
     private:
         static const uint8_t zero_flag_position = 7;
         static const uint8_t subtract_flag_position = 6;
