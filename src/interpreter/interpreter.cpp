@@ -19,14 +19,14 @@ void Interpreter::interpret(const std::vector<char>& game) {
     }
 }
 
-void Interpreter::lookup_command(const int code) {
+void Interpreter::execute_instruction(const int code) {
 
     switch(code) {
         case 0: // NOP
             std::cout << "NOP";
         case 1:
             
-            
+
         case 2:
 
 

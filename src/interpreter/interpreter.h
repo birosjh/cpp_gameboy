@@ -10,7 +10,7 @@ class Interpreter {
 
     private:
 
-        void lookup_command(const int code);
+        void execute_instruction(const int code);
         std::string Interpreter::to_hex(const int code);
 
     public:
