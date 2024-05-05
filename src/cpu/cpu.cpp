@@ -4,32 +4,33 @@
 // 16 Bit Register Logic
 // -----------------------------------------------
 
-uint16_t CPU::get_bc() {
+uint16_t CPU::bc() {
   return uint16_t(b) << 8 | uint16_t(c);
 }
 
-void CPU::set_bc(uint16_t value) {
+void CPU::bc(uint16_t value) {
     b = uint8_t(value & 0xFF00 >> 8);
     c = uint8_t(value & 0xFF);
 }
 
-uint16_t CPU::get_de() {
+uint16_t CPU::de() {
     return uint16_t(d) << 8 | uint16_t(e);
 }
 
-void CPU::set_de(uint16_t value) {
+void CPU::de(uint16_t value) {
     d = uint8_t(value & 0xFF00 >> 8);
     e = uint8_t(value & 0xFF);
 }
 
-uint16_t CPU::get_hl() {
+uint16_t CPU::hl() {
     return uint16_t(h) << 8 | uint16_t(l);
 }
 
-void CPU::set_hl(uint16_t value) {
+void CPU::hl(uint16_t value) {
     h = uint8_t(value & 0xFF00 >> 8);
     l = uint8_t(value & 0xFF);
 }
+
 
 // -----------------------------------------------
 // Flag Logic

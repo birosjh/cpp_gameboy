@@ -19,15 +19,17 @@ class CPU {
         uint8_t f;
         uint8_t h;
         uint8_t l;
+        uint16_t sp;
+        uint16_t pc;
 
-        uint16_t get_bc();
-        void set_bc(uint16_t value);
+        uint16_t bc();
+        void bc(uint16_t value);
 
-        uint16_t get_de();
-        void set_de(uint16_t value);
+        uint16_t de();
+        void de(uint16_t value);
 
-        uint16_t get_hl();
-        void set_hl(uint16_t value);
+        uint16_t hl();
+        void hl(uint16_t value);
 
         void toggle_zero_flag();
         void toggle_subtract_flag();
