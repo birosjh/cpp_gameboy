@@ -31,6 +31,23 @@ void CPU::hl(uint16_t value) {
     l = uint8_t(value & 0xFF);
 }
 
+void CPU::execute(const int code) {
+
+    switch(code) {
+        case 0: // NOP
+            std::cout << "NOP";
+        case 1:
+            
+
+        case 2:
+
+
+        default:
+            // code block
+    }
+
+}
+
 
 // -----------------------------------------------
 // Flag Logic

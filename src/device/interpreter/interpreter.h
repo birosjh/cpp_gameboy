@@ -5,17 +5,17 @@
 #include <vector>
 #include <iostream>
 
+#include "cartridge.h"
 
 class Interpreter {
 
     private:
 
-        void execute_instruction(const int code);
         std::string Interpreter::to_hex(const int code);
 
     public:
 
-        void interpret(const std::vector<char>& game);
+        uint8_t read_next(const std::vector<char>& game);
 
 };
 

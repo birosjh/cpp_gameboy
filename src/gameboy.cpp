@@ -1,7 +1,7 @@
 #include <string>
 
 #include "cartridge.h"
-#include "gameboy.h"
+#include "device.h"
 
 int main() {
 
@@ -9,8 +9,8 @@ int main() {
     
     Cartridge cartridge(game_file);
 
-    Gameboy gameboy(cartridge);
+    Device gameboy();
 
-    gameboy.play()
+    gameboy.play(cartridge)
 
 }
