@@ -1,14 +1,24 @@
-#include "disassembler.h"
-
-#include <iostream>
+#include <fstream>
 #include <string>
+#include <vector>
+
+#include "interpreter.h"
 
 int main() {
     
-    Disassembler disassembler;
+    Interpreter interpreter;
 
-    std::string value = "0x00";
+    std::ifstream cartridge("games/pokemon_yellow_jp.gb", std::ifstream::in);
 
-    std::cout << disassembler.interpret(value) << std::endl;
+    cartridge.seekg(0, cartridge.end);
+    int length = cartridge.tellg();
+    cartridge.seekg(0, cartridge.beg);
+
+    std::vector<char> game(length);
+
+    cartridge.read(&game[0], length);
+    cartridge.close();
+
+    interpreter.interpret(game);
 
 }
