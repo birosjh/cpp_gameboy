@@ -1,24 +1,16 @@
-#include <fstream>
 #include <string>
-#include <vector>
 
-#include "interpreter.h"
+#include "cartridge.h"
+#include "gameboy.h"
 
 int main() {
+
+    std::string game_file = "games/pokemon_yellow_jp.gb"
     
-    Interpreter interpreter;
+    Cartridge cartridge(game_file);
 
-    std::ifstream cartridge("games/pokemon_yellow_jp.gb", std::ifstream::in);
+    Gameboy gameboy(cartridge);
 
-    cartridge.seekg(0, cartridge.end);
-    int length = cartridge.tellg();
-    cartridge.seekg(0, cartridge.beg);
-
-    std::vector<char> game(length);
-
-    cartridge.read(&game[0], length);
-    cartridge.close();
-
-    interpreter.interpret(game);
+    gameboy.play()
 
 }
