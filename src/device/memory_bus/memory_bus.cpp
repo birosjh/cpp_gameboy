@@ -3,7 +3,7 @@
 #include "interpreter.h"
 
 
-uint8_t Interpreter::read_next(uint16_t program_counter, Cartridge cartridge) {
+uint8_t MemoryBus::read_next(uint16_t program_counter) {
 
     auto code = cartridge[program_counter];
     
@@ -17,8 +17,4 @@ uint8_t Interpreter::read_next(uint16_t program_counter, Cartridge cartridge) {
     return value;
 
     std::cout << command << std::endl;
-}
-
-std::string Interpreter::to_hex(const int code) {
-
 }
