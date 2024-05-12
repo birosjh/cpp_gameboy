@@ -1,16 +1,17 @@
 #include <string>
+#include <iostream>
 
 #include "cartridge.h"
 #include "device.h"
 
 int main() {
 
-    std::string game_file = "games/pokemon_yellow_jp.gb"
+    std::string game_file = "games/dmg_boot.bin";
     
     Cartridge cartridge(game_file);
 
-    Device gameboy();
+    std::cout << cartridge.game.size() << std::endl;
 
-    gameboy.play(cartridge)
+    Device gameboy(cartridge);
 
 }
