@@ -5,8 +5,6 @@
 #include <vector>
 #include <iostream>
 
-#include "cartridge.h"
-
 class MemoryBus {
 
     public:
