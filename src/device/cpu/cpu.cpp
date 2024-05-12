@@ -5,47 +5,38 @@
 // -----------------------------------------------
 
 uint16_t CPU::bc() {
-  return uint16_t(b) << 8 | uint16_t(c);
+  return uint16_t(registers["b"]) << 8 | uint16_t(registers["c"]);
 }
 
 void CPU::bc(uint16_t value) {
-    b = uint8_t(value & 0xFF00 >> 8);
-    c = uint8_t(value & 0xFF);
+    registers["b"] = uint8_t(value & 0xFF00 >> 8);
+    registers["c"] = uint8_t(value & 0xFF);
 }
 
 uint16_t CPU::de() {
-    return uint16_t(d) << 8 | uint16_t(e);
+    return uint16_t(registers["d"]) << 8 | uint16_t(registers["e"]);
 }
 
 void CPU::de(uint16_t value) {
-    d = uint8_t(value & 0xFF00 >> 8);
-    e = uint8_t(value & 0xFF);
+    registers["d"] = uint8_t(value & 0xFF00 >> 8);
+    registers["e"] = uint8_t(value & 0xFF);
 }
 
 uint16_t CPU::hl() {
-    return uint16_t(h) << 8 | uint16_t(l);
+    return uint16_t(registers["h"]) << 8 | uint16_t(registers["l"]);
 }
 
 void CPU::hl(uint16_t value) {
-    h = uint8_t(value & 0xFF00 >> 8);
-    l = uint8_t(value & 0xFF);
+    registers["h"] = uint8_t(value & 0xFF00 >> 8);
+    registers["l"] = uint8_t(value & 0xFF);
 }
 
-void CPU::execute(const int code) {
+uint16_t CPU::sp() {
+    return stack_pointer;
+}
 
-    switch(code) {
-        case 0: // NOP
-            std::cout << "NOP";
-        case 1:
-            
-
-        case 2:
-
-
-        default:
-            // code block
-    }
-
+void CPU::sp(uint16_t value) {
+    stack_pointer = value;
 }
 
 
@@ -54,17 +45,17 @@ void CPU::execute(const int code) {
 // -----------------------------------------------
 
 void CPU::toggle_zero_flag() {
-    f ^= 1UL << zero_flag_position;
+    registers["f"] ^= 1UL << zero_flag_position;
 };
         
 void CPU::toggle_subtract_flag() {
-    f ^= 1UL << subtract_flag_position;
+    registers["f"] ^= 1UL << subtract_flag_position;
 };
         
 void CPU::toggle_half_carry_flag() {
-    f ^= 1UL << half_carry_flag_position;
+    registers["f"] ^= 1UL << half_carry_flag_position;
 };
         
 void CPU::toggle_carry_flag() {
-    f ^= 1UL << carry_flag_position;
+    registers["f"] ^= 1UL << carry_flag_position;
 };

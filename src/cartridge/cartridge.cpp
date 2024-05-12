@@ -12,4 +12,5 @@ Cartridge::Cartridge(std::string game_file) {
 
     game_data.read(&game[0], length);
     game_data.close();
+    
 }

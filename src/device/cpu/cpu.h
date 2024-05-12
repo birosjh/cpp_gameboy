@@ -2,6 +2,8 @@
 #define CPU_H
 
 #include <cstdint>
+#include <string>
+#include <unordered_map>
 
 class CPU {
     private:
@@ -10,16 +12,22 @@ class CPU {
         static const uint8_t half_carry_flag_position = 5;
         static const uint8_t carry_flag_position = 4;
 
+        uint16_t stack_pointer;
+
     public:
-        uint8_t a;
-        uint8_t b;
-        uint8_t c;
-        uint8_t d;
-        uint8_t e;
-        uint8_t f;
-        uint8_t h;
-        uint8_t l;
-        uint16_t sp;
+
+        std::unordered_map<std::string, uint8_t> registers =
+        {
+            {"a", 0},
+            {"b", 0},
+            {"c", 0},
+            {"d", 0},
+            {"e", 0},
+            {"f", 0},
+            {"h", 0},
+            {"l", 0},
+        };
+        
         uint16_t pc;
 
         uint16_t bc();
@@ -30,6 +38,10 @@ class CPU {
 
         uint16_t hl();
         void hl(uint16_t value);
+
+        uint16_t sp();
+        void sp(uint16_t value);
+
 
         void toggle_zero_flag();
         void toggle_subtract_flag();
