@@ -1,4 +1,10 @@
-add_library(device)
+add_library(device STATIC device.cpp device.h)
 
-add_subdirectory(cpu)
-add_subdirectory(memory_bus)
+add_library(cpu STATIC ${CMAKE_CURRENT_SOURCE_DIR}/cpu/cpu.cpp ${CMAKE_CURRENT_SOURCE_DIR}/cpu/cpu.h)
+target_include_directories(cpu PUBLIC cpu)
+
+add_library(memory_bus STATIC ${CMAKE_CURRENT_SOURCE_DIR}/memory_bus/memory_bus.cpp ${CMAKE_CURRENT_SOURCE_DIR}/memory_bus/memory_bus.h)
+target_include_directories(memory_bus PUBLIC memory_bus)
+
+target_link_libraries(device PUBLIC cpu memory_bus)
+target_include_directories(device PUBLIC cpu memory_bus)
