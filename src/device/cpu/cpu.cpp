@@ -39,6 +39,14 @@ void CPU::sp(uint16_t value) {
     stack_pointer = value;
 }
 
+uint16_t CPU::pc() {
+    return program_counter;
+}
+
+void CPU::pc(uint16_t value) {
+    program_counter = value;
+}
+
 
 // -----------------------------------------------
 // Flag Logic
