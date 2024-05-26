@@ -3,13 +3,20 @@
 
 #include <string>
 #include <vector>
-#include <iostream>
+#include <fstream>
+#include <cstdint>
 
 class MemoryBus {
 
-    public:
+    private:
+        std::vector<char> rom;
 
-        uint8_t read_next(const std::vector<char>& game);
+    public:
+        MemoryBus();
+        uint8_t read_from_memory(uint16_t location);
+        void write_to_memory(uint16_t location, uint8_t value);
+
+        
 
 };
 
