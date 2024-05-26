@@ -13,6 +13,7 @@ class CPU {
         static const uint8_t carry_flag_position = 4;
 
         uint16_t stack_pointer;
+        uint16_t program_counter;
 
     public:
 
@@ -28,7 +29,8 @@ class CPU {
             {"l", 0},
         };
         
-        uint16_t pc;
+        uint16_t pc();
+        void pc(uint16_t value);
 
         uint16_t bc();
         void bc(uint16_t value);
