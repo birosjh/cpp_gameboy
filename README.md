@@ -31,3 +31,5 @@ build/src/gameboy
 ```bash
 hexdump -e \"%07_ax\ \"\ 16/1\ \"\ %02x\"\ \"\\n\" <file>
 ```
+
+2. The Game Boy is little endian which means that when you have numbers that are larger than 1 byte.  This is mostly only important for stores and loads.
