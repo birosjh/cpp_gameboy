@@ -24,9 +24,16 @@ class CPU {
             {"c", 0},
             {"d", 0},
             {"e", 0},
-            {"f", 0},
             {"h", 0},
             {"l", 0},
+        };
+
+        std::unordered_map<std::string, bool> flags =
+        {
+            {"z", false},
+            {"n", false},
+            {"h", false},
+            {"c", false},
         };
         
         uint16_t pc();
@@ -43,12 +50,6 @@ class CPU {
 
         uint16_t sp();
         void sp(uint16_t value);
-
-
-        void toggle_zero_flag();
-        void toggle_subtract_flag();
-        void toggle_half_carry_flag();
-        void toggle_carry_flag();
 
 
 };
