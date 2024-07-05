@@ -12,7 +12,7 @@ FetchContent_MakeAvailable(googletest)
 add_executable(
   gameboy_test
   test_gameboy.cpp
-  test_operations.cpp
+  test_increment.cpp
 )
 target_compile_options(gameboy_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
 
