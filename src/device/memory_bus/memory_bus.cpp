@@ -1,12 +1,16 @@
-#include <sstream>
-
 #include "memory_bus.h"
 
 
 MemoryBus::MemoryBus() {
+
+    rom.reserve(32767);
+
     // Load Boot Rom
     std::ifstream boot_rom("boot/dmg_boot.bin", std::ifstream::in);
-    boot_rom.read(&rom[0], 256);
+    rom.insert(rom.begin(),
+               std::istream_iterator<char>(boot_rom),
+               std::istream_iterator<char>());
+
 }
 
 uint8_t MemoryBus::read_from_memory(uint16_t location) {
