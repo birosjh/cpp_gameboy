@@ -1,19 +1,18 @@
 #include <string>
 #include <cstdint>
 
+#include "cpu.h"
+#include "memory_bus.h"
+
 // Load Operation Functions
 
 namespace LD {
-    uint16_t single(std::string in_register);
-    uint16_t single_from_register(std::string in_register, std::string load_register);
-    uint16_t single_from_address(std::string in_register, std::string address_register);
-    uint16_t single_from_address(std::string address_register, std::string symbol, std::string load_register);
-    uint16_t single_to_address(std::string address_register, std::string load_register);
-    uint16_t single_to_address(std::string address_register, std::string symbol, std::string load_register);
-    uint16_t single_to_address(std::string address_register);
+    uint16_t single_from_single(CPU& cpu, std::string in_register, std::string load_register);
+    uint16_t single_from_address(CPU& cpu, MemoryBus& memory_bus, std::string in_register, uint16_t address);
+    uint16_t single_from_value(CPU& cpu, std::string in_register, uint8_t value);
+    uint16_t address_from_single(CPU& cpu, MemoryBus& memory_bus, uint16_t address, std::string load_register);
 
-    uint16_t pair(std::string double_register);
-    uint16_t pair_to_next(std::string double_register);
+    uint16_t double_from_value(CPU& cpu, std::string in_register, uint16_t value);
 }
 
         
