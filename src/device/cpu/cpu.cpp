@@ -10,7 +10,7 @@ uint16_t CPU::bc() {
 
 void CPU::bc(uint16_t value) {
     registers["b"] = value & 0xFF;
-    registers["c"] = value > 8;
+    registers["c"] = value >> 8;
 }
 
 uint16_t CPU::de() {
@@ -19,7 +19,7 @@ uint16_t CPU::de() {
 
 void CPU::de(uint16_t value) {
     registers["d"] = value & 0xFF;
-    registers["e"] = value > 8;
+    registers["e"] = value >> 8;
 }
 
 uint16_t CPU::hl() {
@@ -28,7 +28,7 @@ uint16_t CPU::hl() {
 
 void CPU::hl(uint16_t value) {
     registers["h"] = value & 0xFF;
-    registers["l"] = value > 8;
+    registers["l"] = value >> 8;
 }
 
 uint16_t CPU::sp() {
