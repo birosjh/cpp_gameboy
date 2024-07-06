@@ -1,3 +1,6 @@
+#ifndef LOAD_H
+#define LOAD_H
+
 #include <string>
 #include <cstdint>
 
@@ -14,5 +17,7 @@ namespace LD {
 
     uint16_t double_from_value(CPU& cpu, std::string in_register, uint16_t value);
 }
+
+#endif // LOAD_H
 
         

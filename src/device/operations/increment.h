@@ -1,3 +1,6 @@
+#ifndef INCREMENT_H
+#define INCREMENT_H
+
 #include <string>
 #include <cstdint>
 #include <vector>
@@ -18,3 +21,5 @@ namespace DEC {
     uint16_t pair(CPU& cpu, std::string double_register);
     uint16_t address(CPU& cpu, MemoryBus& memory_bus, std::string double_register);
 }
+
+#endif // INCREMENT_H
