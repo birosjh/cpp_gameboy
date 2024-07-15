@@ -10,6 +10,7 @@ set(OPERATIONS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/operations)
 add_library(operations STATIC
     ${OPERATIONS_DIR}/increment.cpp ${OPERATIONS_DIR}/increment.h
     ${OPERATIONS_DIR}/load.cpp ${OPERATIONS_DIR}/load.h
+    ${OPERATIONS_DIR}/math.cpp ${OPERATIONS_DIR}/math.h
 )
 target_link_libraries(operations PUBLIC cpu memory_bus)
 target_include_directories(operations PUBLIC cpu memory_bus)

@@ -14,6 +14,7 @@ add_executable(
   test_gameboy.cpp
   test_increment.cpp
   test_load.cpp
+  test_math.cpp
 )
 target_compile_options(gameboy_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
 
