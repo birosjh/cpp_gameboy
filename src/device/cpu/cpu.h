@@ -35,6 +35,9 @@ class CPU {
             {"h", false},
             {"c", false},
         };
+
+        uint16_t double_register(std::string register_name);
+        void double_register(std::string register_name, uint16_t value);
         
         uint16_t pc();
         void pc(uint16_t value);

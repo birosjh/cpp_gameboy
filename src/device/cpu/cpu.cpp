@@ -46,3 +46,36 @@ uint16_t CPU::pc() {
 void CPU::pc(uint16_t value) {
     program_counter = value;
 }
+
+uint16_t CPU::double_register(std::string register_name) {
+    uint16_t value;
+
+    if (register_name == "bc") {
+        value = bc();
+    }
+    else if (register_name == "de") {
+        value = de();
+    }
+    else if (register_name == "hl") {
+        value = hl();
+    }
+    else if (register_name == "sp") {
+        value = sp();
+    }
+
+    return value;
+}
+
+void CPU::double_register(std::string register_name, uint16_t value) {
+    if(register_name == "bc") {
+        bc(value);
+    } else if(register_name == "de") {
+        de(value);
+    } else if(register_name == "hl") {
+        hl(value);
+    } else if (register_name == "sp") {
+        sp(value);
+    } else {
+        throw "Register does not exist";
+    }
+}

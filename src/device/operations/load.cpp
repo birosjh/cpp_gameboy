@@ -43,17 +43,7 @@ uint16_t LD::address_from_single(CPU& cpu, MemoryBus& memory_bus, uint16_t addre
 
 uint16_t LD::double_from_value(CPU& cpu, std::string in_register, uint16_t value) {
 
-    if(in_register == "bc") {
-        cpu.bc(value);
-    } else if(in_register == "de") {
-        cpu.de(value);
-    } else if(in_register == "hl") {
-        cpu.hl(value);
-    } else if (in_register == "sp") {
-        cpu.sp(value);
-    } else {
-        throw "Register does not exist";
-    }
+    cpu.double_register(in_register, value);
 
     return cpu.pc() + 1;
 }
