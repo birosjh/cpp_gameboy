@@ -5,13 +5,9 @@
 #include <string>
 #include <unordered_map>
 
+
 class CPU {
     private:
-        static const uint8_t zero_flag_position = 7;
-        static const uint8_t subtract_flag_position = 6;
-        static const uint8_t half_carry_flag_position = 5;
-        static const uint8_t carry_flag_position = 4;
-
         uint16_t stack_pointer;
         uint16_t program_counter;
 
