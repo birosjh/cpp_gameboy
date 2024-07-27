@@ -8,11 +8,11 @@
 TEST(LoadTest, CanLoadOneRegisterIntoAnother) {
     CPU cpu;
 
-    cpu.registers["b"] = 20;
+    cpu.registers[B] = 20;
     
-    LD::single_from_single(cpu, "a", "b");
+    LD::single_from_single(cpu, A, B);
 
-    ASSERT_EQ(cpu.registers["a"], cpu.registers["b"]);
+    ASSERT_EQ(cpu.registers[A], cpu.registers[B]);
 }
 
 TEST(LoadTest, CanLoadValueFromAddressIntoSingleRegister) {
@@ -24,9 +24,9 @@ TEST(LoadTest, CanLoadValueFromAddressIntoSingleRegister) {
 
     memory_bus.write_to_memory(address, value);
     
-    LD::single_from_address(cpu, memory_bus, "a", address);
+    LD::single_from_address(cpu, memory_bus, A, address);
 
-    ASSERT_EQ(cpu.registers["a"], value);
+    ASSERT_EQ(cpu.registers[A], value);
 }
 
 TEST(LoadTest, CanLoadValueIntoSingleRegister) {
@@ -34,9 +34,9 @@ TEST(LoadTest, CanLoadValueIntoSingleRegister) {
 
     uint8_t value = 92;
     
-    LD::single_from_value(cpu, "a", value);
+    LD::single_from_value(cpu, A, value);
 
-    ASSERT_EQ(cpu.registers["a"], value);
+    ASSERT_EQ(cpu.registers[A], value);
 }
 
 TEST(LoadTest, CanLoadValueIntoMemory) {
@@ -46,9 +46,9 @@ TEST(LoadTest, CanLoadValueIntoMemory) {
     uint8_t value = 32;
     uint16_t address = 2555;
 
-    cpu.registers["d"] = value;
+    cpu.registers[D] = value;
     
-    LD::address_from_single(cpu, memory_bus, address, "d");
+    LD::to_address_from_single(cpu, memory_bus, address, D);
 
     auto value_in_memory = memory_bus.read_from_memory(address);
 
@@ -61,18 +61,10 @@ TEST(LoadTest, CanLoadValueIntoDoubleRegister) {
     uint16_t value_one = 92;
     uint16_t value_two = 20000;
     
-    LD::double_from_value(cpu, "bc", value_one);
-    LD::double_from_value(cpu, "hl", value_two);
+    LD::double_from_value(cpu, BC, value_one);
+    LD::double_from_value(cpu, HL, value_two);
 
     ASSERT_EQ(cpu.bc(), value_one);
     ASSERT_EQ(cpu.hl(), value_two);
-}
-
-TEST(LoadTest, LoadingToNonexistentRegisterCausesException) {
-    CPU cpu;
-
-    LD::single_from_value(cpu, "z", 1);
-
-    ASSERT_ANY_THROW(LD::double_from_value(cpu, "hi", 1));
 }
 

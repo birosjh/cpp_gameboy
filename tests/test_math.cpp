@@ -11,36 +11,36 @@
 TEST(AddTest, RegistersCanBeAdded) {
     CPU cpu;
 
-    cpu.registers["a"] = 5;
-    cpu.registers["b"] = 5;
+    cpu.registers[A] = 5;
+    cpu.registers[B] = 5;
 
     uint8_t expected_value = 10;
 
-    ADD::single_registers(cpu, "a", "b");
+    ADD::single_registers(cpu, A, B);
 
-    ASSERT_EQ(cpu.registers["a"], expected_value);
+    ASSERT_EQ(cpu.registers[A], expected_value);
 }
 
 TEST(AddTest, AddResultingInZeroSetsFlag) {
     CPU cpu;
 
-    cpu.registers["a"] = 255;
-    cpu.registers["b"] = 1;
+    cpu.registers[A] = 255;
+    cpu.registers[B] = 1;
 
-    ADD::single_registers(cpu, "a", "b");
+    ADD::single_registers(cpu, A, B);
 
-    ASSERT_EQ(cpu.flags["z"], true);
+    ASSERT_EQ(cpu.flags[Zero], true);
 }
 
 TEST(AddTest, AddUsingHalfCarrySetsHalfCarryFlag) {
     CPU cpu;
 
-    cpu.registers["a"] = 62;
-    cpu.registers["b"] = 34;
+    cpu.registers[A] = 62;
+    cpu.registers[B] = 34;
 
-    ADD::single_registers(cpu, "a", "b");
+    ADD::single_registers(cpu, A, B);
 
-    ASSERT_EQ(cpu.flags["h"], true);
+    ASSERT_EQ(cpu.flags[HalfCarry], true);
 }
 
 TEST(AddTest, AddressValuesCanBeSubtractedFromRegisters) {
@@ -51,11 +51,11 @@ TEST(AddTest, AddressValuesCanBeSubtractedFromRegisters) {
 
     memory_bus.write_to_memory(address, 9);
 
-    cpu.registers["a"] = 10;
+    cpu.registers[A] = 10;
 
-    ADD::to_single_using_address(cpu, memory_bus, "a", address);
+    ADD::to_single_using_address(cpu, memory_bus, A, address);
 
-    ASSERT_EQ(cpu.registers["a"], 19);
+    ASSERT_EQ(cpu.registers[A], 19);
 }
 
 
@@ -64,34 +64,34 @@ TEST(SubTest, RegistersCanBeSubtracted) {
 
     uint8_t expected_value = 5;
 
-    cpu.registers["a"] = 10;
-    cpu.registers["b"] = 5;
+    cpu.registers[A] = 10;
+    cpu.registers[B] = 5;
 
-    SUB::single_registers(cpu, "a", "b");
+    SUB::single_registers(cpu, A, B);
 
-    ASSERT_EQ(cpu.registers["a"], expected_value);
+    ASSERT_EQ(cpu.registers[A], expected_value);
 }
 
 TEST(SubTest, SubtractionResultingInZeroSetsZeroFlag) {
     CPU cpu;
 
-    cpu.registers["a"] = 10;
-    cpu.registers["b"] = 10;
+    cpu.registers[A] = 10;
+    cpu.registers[B] = 10;
 
-    SUB::single_registers(cpu, "a", "b");
+    SUB::single_registers(cpu, A, B);
 
-    ASSERT_EQ(cpu.flags["z"], true);
+    ASSERT_EQ(cpu.flags[Zero], true);
 }
 
 TEST(SubTest, SubtractionSetsNegativeFlag) {
     CPU cpu;
 
-    cpu.registers["a"] = 10;
-    cpu.registers["b"] = 5;
+    cpu.registers[A] = 10;
+    cpu.registers[B] = 5;
 
-    SUB::single_registers(cpu, "a", "b");
+    SUB::single_registers(cpu, A, B);
 
-    ASSERT_EQ(cpu.flags["n"], true);
+    ASSERT_EQ(cpu.flags[Negative], true);
 }
 
 
@@ -103,11 +103,11 @@ TEST(SubTest, AddressValuesCanBeSubtractedFromRegisters) {
 
     memory_bus.write_to_memory(address, 9);
 
-    cpu.registers["a"] = 10;
+    cpu.registers[A] = 10;
 
-    SUB::from_single_using_address(cpu, memory_bus, "a", address);
+    SUB::from_single_using_address(cpu, memory_bus, A, address);
 
-    ASSERT_EQ(cpu.registers["a"], 1);
+    ASSERT_EQ(cpu.registers[A], 1);
 }
 
 // Double Register Tests
@@ -118,14 +118,14 @@ TEST(AddTest, DoubleRegistersCanBeAdded) {
     auto value_one = 3000;
     auto value_two = 2000;
 
-    cpu.double_register("hl", value_one);
-    cpu.double_register("bc", value_two);
+    cpu.double_register(HL, value_one);
+    cpu.double_register(BC, value_two);
 
     uint16_t expected_value = value_one + value_two;
 
-    ADD::double_registers(cpu, "hl", "bc");
+    ADD::double_registers(cpu, HL, BC);
 
-    ASSERT_EQ(cpu.double_register("hl"), expected_value);
+    ASSERT_EQ(cpu.double_register(HL), expected_value);
 }
 
 TEST(AddTest, DoubleAddUsingHalfCarrySetsHalfCarryFlag) {
@@ -134,12 +134,12 @@ TEST(AddTest, DoubleAddUsingHalfCarrySetsHalfCarryFlag) {
     auto value_one = 4095;
     auto value_two = 1;
 
-    cpu.double_register("hl", value_one);
-    cpu.double_register("bc", value_two);
+    cpu.double_register(HL, value_one);
+    cpu.double_register(BC, value_two);
 
-    ADD::double_registers(cpu, "hl", "bc");
+    ADD::double_registers(cpu, HL, BC);
 
-    ASSERT_EQ(cpu.flags["h"], true);
+    ASSERT_EQ(cpu.flags[HalfCarry], true);
 }
 
 

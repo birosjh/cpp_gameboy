@@ -5,6 +5,18 @@
 #include <string>
 #include <unordered_map>
 
+enum Flag {
+    Zero, Negative, HalfCarry, Carry
+};
+
+enum Register {
+    A, B, C, D, E, H, L
+};
+
+enum DoubleRegister {
+    BC, DE, HL, SP, PC
+};
+
 
 class CPU {
     private:
@@ -13,27 +25,27 @@ class CPU {
 
     public:
 
-        std::unordered_map<std::string, uint8_t> registers =
+        std::unordered_map<Register, uint8_t> registers =
         {
-            {"a", 0},
-            {"b", 0},
-            {"c", 0},
-            {"d", 0},
-            {"e", 0},
-            {"h", 0},
-            {"l", 0},
+            {A, 0},
+            {B, 0},
+            {C, 0},
+            {D, 0},
+            {E, 0},
+            {H, 0},
+            {L, 0},
         };
 
-        std::unordered_map<std::string, bool> flags =
+        std::unordered_map<Flag, bool> flags =
         {
-            {"z", false},
-            {"n", false},
-            {"h", false},
-            {"c", false},
+            {Zero, false},
+            {Negative, false},
+            {HalfCarry, false},
+            {Carry, false},
         };
 
-        uint16_t double_register(std::string register_name);
-        void double_register(std::string register_name, uint16_t value);
+        uint16_t double_register(DoubleRegister register_name);
+        void double_register(DoubleRegister register_name, uint16_t value);
         
         uint16_t pc();
         void pc(uint16_t value);
@@ -49,7 +61,6 @@ class CPU {
 
         uint16_t sp();
         void sp(uint16_t value);
-
 
 };
 

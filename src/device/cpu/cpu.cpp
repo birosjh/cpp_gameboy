@@ -5,30 +5,30 @@
 // -----------------------------------------------
 
 uint16_t CPU::bc() {
-  return registers["b"] | registers["c"] << 8;
+  return registers[B] | registers[C] << 8;
 }
 
 void CPU::bc(uint16_t value) {
-    registers["b"] = value & 0xFF;
-    registers["c"] = value >> 8;
+    registers[B] = value & 0xFF;
+    registers[C] = value >> 8;
 }
 
 uint16_t CPU::de() {
-    return registers["d"] | registers["e"] << 8;
+    return registers[D] | registers[E] << 8;
 }
 
 void CPU::de(uint16_t value) {
-    registers["d"] = value & 0xFF;
-    registers["e"] = value >> 8;
+    registers[D] = value & 0xFF;
+    registers[E] = value >> 8;
 }
 
 uint16_t CPU::hl() {
-    return registers["h"] | registers["l"] << 8;
+    return registers[H] | registers[L] << 8;
 }
 
 void CPU::hl(uint16_t value) {
-    registers["h"] = value & 0xFF;
-    registers["l"] = value >> 8;
+    registers[H] = value & 0xFF;
+    registers[L] = value >> 8;
 }
 
 uint16_t CPU::sp() {
@@ -47,33 +47,33 @@ void CPU::pc(uint16_t value) {
     program_counter = value;
 }
 
-uint16_t CPU::double_register(std::string register_name) {
+uint16_t CPU::double_register(DoubleRegister register_name) {
     uint16_t value;
 
-    if (register_name == "bc") {
+    if (register_name == BC) {
         value = bc();
     }
-    else if (register_name == "de") {
+    else if (register_name == DE) {
         value = de();
     }
-    else if (register_name == "hl") {
+    else if (register_name == HL) {
         value = hl();
     }
-    else if (register_name == "sp") {
+    else if (register_name == SP) {
         value = sp();
     }
 
     return value;
 }
 
-void CPU::double_register(std::string register_name, uint16_t value) {
-    if(register_name == "bc") {
+void CPU::double_register(DoubleRegister register_name, uint16_t value) {
+    if(register_name == BC) {
         bc(value);
-    } else if(register_name == "de") {
+    } else if(register_name == DE) {
         de(value);
-    } else if(register_name == "hl") {
+    } else if(register_name == HL) {
         hl(value);
-    } else if (register_name == "sp") {
+    } else if (register_name == SP) {
         sp(value);
     } else {
         throw "Register does not exist";

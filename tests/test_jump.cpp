@@ -19,7 +19,7 @@ TEST(JumpTest, CanJumpToValueInDoubleRegister) {
 
     cpu.hl(value);
     
-    JP::to_address_in_register(cpu, "hl");
+    JP::to_address_in_register(cpu, HL);
 
     ASSERT_EQ(cpu.pc(), value);
 }
@@ -29,7 +29,7 @@ TEST(JumpTest, CanJumpIfZeroFlagSet) {
 
     uint16_t value = 2000;
 
-    std::string flag = "z";
+    Flag flag = Zero;
 
     // Flag Off
 
@@ -53,7 +53,7 @@ TEST(JumpTest, CanJumpIfCarryFlagSet) {
 
     uint16_t value = 2000;
 
-    std::string flag = "c";
+    Flag flag = Carry;
 
     // Flag Off
 
@@ -77,7 +77,7 @@ TEST(JumpTest, CanJumpIfHalfCarryFlagSet) {
 
     uint16_t value = 2000;
 
-    std::string flag = "h";
+    Flag flag = HalfCarry;
 
     // Flag Off
 
@@ -101,7 +101,7 @@ TEST(JumpTest, CanJumpIfNegativeFlagSet) {
 
     uint16_t value = 2000;
 
-    std::string flag = "n";
+    Flag flag = Negative;
 
     // Flag Off
 

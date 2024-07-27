@@ -10,25 +10,25 @@
 TEST(IncrementTest, IncrementSingleZeroResultsIsOne) {
     CPU cpu;
     
-    INC::single(cpu, "a");
+    INC::single(cpu, A);
 
-    ASSERT_EQ(cpu.registers["a"], 1);
+    ASSERT_EQ(cpu.registers[A], 1);
 }
 
 TEST(IncrementTest, IncrementSingleThenDecrementIsZero) {
     CPU cpu;
     
-    INC::single(cpu, "a");
-    DEC::single(cpu, "a");
+    INC::single(cpu, A);
+    DEC::single(cpu, A);
 
-    ASSERT_EQ(cpu.registers["a"], 0);
+    ASSERT_EQ(cpu.registers[A], 0);
 }
 
 TEST(IncrementTest, IncrementDoubleThenDecrementIsZero) {
     CPU cpu;
     
-    INC::pair(cpu, "bc");
-    DEC::pair(cpu, "bc");
+    INC::pair(cpu, BC);
+    DEC::pair(cpu, BC);
 
     uint16_t value = 0;
 
@@ -38,45 +38,45 @@ TEST(IncrementTest, IncrementDoubleThenDecrementIsZero) {
 TEST(IncrementTest, SingleValueOverflowsAndSetsZeroFlag) {
     CPU cpu;
 
-    cpu.registers["a"] = 255;
+    cpu.registers[A] = 255;
     
-    INC::single(cpu, "a");
+    INC::single(cpu, A);
 
-    ASSERT_EQ(cpu.registers["a"], 0);
-    ASSERT_EQ(cpu.flags["z"], true);
+    ASSERT_EQ(cpu.registers[A], 0);
+    ASSERT_EQ(cpu.flags[Zero], true);
 }
 
 TEST(IncrementTest, SingleHalfCarryIsSet) {
     CPU cpu;
 
-    cpu.registers["a"] = 15;
+    cpu.registers[A] = 15;
     
-    INC::single(cpu, "a");
+    INC::single(cpu, A);
 
-    ASSERT_EQ(cpu.flags["z"], false);
-    ASSERT_EQ(cpu.flags["h"], true);
+    ASSERT_EQ(cpu.flags[Zero], false);
+    ASSERT_EQ(cpu.flags[HalfCarry], true);
 }
 
 TEST(DecrementTest, DecrementFromOneResultsInZeroAndSetsZeroFlag) {
     CPU cpu;
 
-    cpu.registers["a"] = 1;
+    cpu.registers[A] = 1;
     
-    DEC::single(cpu, "a");
+    DEC::single(cpu, A);
 
-    ASSERT_EQ(cpu.registers["a"], 0);
-    ASSERT_EQ(cpu.flags["z"], true);
+    ASSERT_EQ(cpu.registers[A], 0);
+    ASSERT_EQ(cpu.flags[Zero], true);
 }
 
 TEST(DecrementTest, SingleHalfCarryIsSet) {
     CPU cpu;
 
-    cpu.registers["a"] = 16;
+    cpu.registers[A] = 16;
     
-    DEC::single(cpu, "a");
+    DEC::single(cpu, A);
 
-    ASSERT_EQ(cpu.flags["z"], false);
-    ASSERT_EQ(cpu.flags["h"], true);
+    ASSERT_EQ(cpu.flags[Zero], false);
+    ASSERT_EQ(cpu.flags[HalfCarry], true);
 }
 
 // Double Register Tests
@@ -84,7 +84,7 @@ TEST(DecrementTest, SingleHalfCarryIsSet) {
 TEST(IncrementTest, IncrementDoubleZeroResultsIsOne) {
     CPU cpu;
     
-    INC::pair(cpu, "bc");
+    INC::pair(cpu, BC);
 
     uint16_t value = 1;
 
@@ -96,7 +96,7 @@ TEST(DecrementTest, IncrementDoubleZeroResultsIsOne) {
 
     cpu.bc(1);
     
-    DEC::pair(cpu, "bc");
+    DEC::pair(cpu, BC);
 
     uint16_t value = 0;
 
