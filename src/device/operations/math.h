@@ -12,7 +12,17 @@ namespace ADD {
     uint16_t to_single_using_address(CPU& cpu, MemoryBus& memory_bus, Register in_register, uint16_t address);
 }
 
+namespace ADC {
+    uint16_t single_registers(CPU& cpu, Register in_register, Register add_register);
+    uint16_t to_single_using_address(CPU& cpu, MemoryBus& memory_bus, Register in_register, uint16_t address);
+}
+
 namespace SUB {
+    uint16_t single_registers(CPU& cpu, Register in_register, Register add_register);
+    uint16_t from_single_using_address(CPU& cpu, MemoryBus& memory_bus, Register in_register, uint16_t address);
+}
+
+namespace SBC {
     uint16_t single_registers(CPU& cpu, Register in_register, Register add_register);
     uint16_t from_single_using_address(CPU& cpu, MemoryBus& memory_bus, Register in_register, uint16_t address);
 }
