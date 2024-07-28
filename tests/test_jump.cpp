@@ -120,3 +120,43 @@ TEST(JumpTest, CanJumpIfNegativeFlagSet) {
     ASSERT_EQ(cpu.pc(), value);
 }
 
+TEST(RelativeJumpTest, CanRelativeJumpToAddress) {
+    CPU cpu;
+
+    uint16_t starting_value = 15;
+    cpu.pc(starting_value);
+
+    uint8_t value = 5;
+    
+    JR::by_adding(cpu, value);
+
+    ASSERT_EQ(cpu.pc(), starting_value + value);
+}
+
+TEST(RelativeJumpTest, CanRelativeJumpIfNegativeFlagSet) {
+    CPU cpu;
+
+    std::vector<Flag> flags { Zero, HalfCarry, Negative, Carry };
+
+    uint16_t value = 2000;
+
+    for (auto& flag : flags) {
+        // Flag Off
+
+        auto original_value = cpu.pc();
+
+        JP::to_address_if_flag(cpu, flag, value);
+
+        ASSERT_EQ(cpu.pc(), original_value);
+
+        // Flag On
+
+        cpu.flags[flag] = true;
+        
+        JP::to_address_if_flag(cpu, flag, value);
+
+        ASSERT_EQ(cpu.pc(), value);
+    }
+    
+}
+
