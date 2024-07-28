@@ -1,8 +1,6 @@
 #ifndef MATH_H
 #define MATH_H
 
-#include <string>
-
 #include "cpu.h"
 #include "memory_bus.h"
 
