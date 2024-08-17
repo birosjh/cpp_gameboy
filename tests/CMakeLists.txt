@@ -18,6 +18,7 @@ add_executable(
   test_jump.cpp
   test_bool.cpp
   test_compare.cpp
+  test_stack.cpp
 )
 target_compile_options(gameboy_test PRIVATE -Wall -Wextra -Wpedantic -Werror)
 

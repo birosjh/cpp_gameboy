@@ -14,6 +14,7 @@ add_library(operations STATIC
     ${OPERATIONS_DIR}/jump.cpp ${OPERATIONS_DIR}/jump.h
     ${OPERATIONS_DIR}/bool.cpp ${OPERATIONS_DIR}/bool.h
     ${OPERATIONS_DIR}/compare.cpp ${OPERATIONS_DIR}/compare.h
+    ${OPERATIONS_DIR}/stack.cpp ${OPERATIONS_DIR}/stack.h
 )
 target_link_libraries(operations PUBLIC cpu memory_bus)
 target_include_directories(operations PUBLIC cpu memory_bus)
