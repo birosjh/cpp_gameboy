@@ -16,13 +16,26 @@ uint16_t ADD::single_registers(CPU& cpu, Register in_register, Register add_regi
     return cpu.pc() + 1;
 }
 
-uint16_t ADD::to_single_using_address(CPU& cpu, MemoryBus& memory_bus, Register in_register, uint16_t address) {
+uint16_t ADD::to_single(CPU& cpu, MemoryBus& memory_bus, Register in_register, uint16_t address) {
 
     auto value_from_memory = memory_bus.read_from_memory(address);
 
     bool half_carry_occured = (((cpu.registers[in_register] & 0xF) + (value_from_memory & 0xF)) & 0x10) == 0x10;
 
     cpu.registers[in_register] = cpu.registers[in_register] + value_from_memory;
+
+    cpu.flags[Zero] = cpu.registers[in_register] == 0;
+    cpu.flags[HalfCarry] = half_carry_occured;
+
+    return cpu.pc() + 1;
+
+}
+
+uint16_t ADD::to_single(CPU& cpu, Register in_register, uint8_t value) {
+
+    bool half_carry_occured = (((cpu.registers[in_register] & 0xF) + (value & 0xF)) & 0x10) == 0x10;
+
+    cpu.registers[in_register] = cpu.registers[in_register] + value;
 
     cpu.flags[Zero] = cpu.registers[in_register] == 0;
     cpu.flags[HalfCarry] = half_carry_occured;
@@ -68,9 +81,22 @@ uint16_t ADC::single_registers(CPU& cpu, Register in_register, Register add_regi
     return cpu.pc() + 1;
 }
 
-uint16_t ADC::to_single_using_address(CPU& cpu, MemoryBus& memory_bus, Register in_register, uint16_t address) {
+uint16_t ADC::to_single(CPU& cpu, MemoryBus& memory_bus, Register in_register, uint16_t address) {
 
     auto value = memory_bus.read_from_memory(address) + (uint8_t) cpu.flags[Carry];
+
+    bool half_carry_occured = (((cpu.registers[in_register] & 0xF) + (value & 0xF)) & 0x10) == 0x10;
+
+    cpu.registers[in_register] = cpu.registers[in_register] + value;
+
+    cpu.flags[Zero] = cpu.registers[in_register] == 0;
+    cpu.flags[HalfCarry] = half_carry_occured;
+
+    return cpu.pc() + 1;
+
+}
+
+uint16_t ADC::to_single(CPU& cpu, Register in_register, uint8_t value) {
 
     bool half_carry_occured = (((cpu.registers[in_register] & 0xF) + (value & 0xF)) & 0x10) == 0x10;
 
@@ -101,7 +127,7 @@ uint16_t SUB::single_registers(CPU& cpu, Register in_register, Register add_regi
     return cpu.pc() + 1;
 }
 
-uint16_t SUB::from_single_using_address(CPU& cpu, MemoryBus& memory_bus, Register in_register, uint16_t address) {
+uint16_t SUB::from_single(CPU& cpu, MemoryBus& memory_bus, Register in_register, uint16_t address) {
 
     auto value_from_memory = memory_bus.read_from_memory(address);
 
@@ -116,11 +142,37 @@ uint16_t SUB::from_single_using_address(CPU& cpu, MemoryBus& memory_bus, Registe
     return cpu.pc() + 1;
 }
 
+uint16_t SUB::from_single(CPU& cpu, Register in_register, uint8_t value) {
+
+    cpu.registers[in_register] = cpu.registers[in_register] - value;
+
+    bool half_carry_occured = (((cpu.registers[in_register] & 0xF) + (value & 0xF)) & 0x10) == 0x10;
+
+    cpu.flags[Zero] = cpu.registers[in_register] == 0;
+    cpu.flags[Negative] = true;
+    cpu.flags[HalfCarry] = half_carry_occured;
+
+    return cpu.pc() + 1;
+}
+
 uint16_t SBC::single_registers(CPU& cpu, Register in_register, Register add_register) {
 
     cpu.registers[in_register] = cpu.registers[in_register] - (cpu.registers[add_register] + cpu.flags[Carry]);
 
     bool half_carry_occured = (((cpu.registers[in_register] & 0xF) + (cpu.registers[add_register] & 0xF)) & 0x10) == 0x10;
+
+    cpu.flags[Zero] = cpu.registers[in_register] == 0;
+    cpu.flags[Negative] = true;
+    cpu.flags[HalfCarry] = half_carry_occured;
+
+    return cpu.pc() + 1;
+}
+
+uint16_t SBC::from_single(CPU& cpu, Register in_register, uint8_t value) {
+
+    cpu.registers[in_register] = cpu.registers[in_register] - (value + cpu.flags[Carry]);
+
+    bool half_carry_occured = (((cpu.registers[in_register] & 0xF) + (value & 0xF)) & 0x10) == 0x10;
 
     cpu.flags[Zero] = cpu.registers[in_register] == 0;
     cpu.flags[Negative] = true;
