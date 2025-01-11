@@ -23,7 +23,12 @@ uint16_t POP::register_pair(CPU& cpu, MemoryBus& memory_bus, Register first, Reg
 
     auto increment_sp = cpu.sp();
     
-    cpu.registers[second] = memory_bus.read_from_memory(increment_sp);
+    if(second != F) {
+        cpu.registers[second] = memory_bus.read_from_memory(increment_sp);
+    } else{
+        cpu.f(memory_bus.read_from_memory(increment_sp));
+    }
+    
     memory_bus.write_to_memory(increment_sp, 0);
 
     increment_sp = cpu.sp() + 1;
