@@ -9,8 +9,12 @@ uint16_t PUSH::register_pair(CPU& cpu, MemoryBus& memory_bus, Register first, Re
     memory_bus.write_to_memory(decremented_sp, cpu.registers[first]);
 
     decremented_sp -= 1;
-
-    memory_bus.write_to_memory(decremented_sp, cpu.registers[second]);
+    
+    if(second != F) {
+        memory_bus.write_to_memory(decremented_sp, cpu.registers[second]);
+    } else{
+        memory_bus.write_to_memory(decremented_sp, cpu.f());
+    }
 
     cpu.sp(decremented_sp);
 
@@ -28,7 +32,7 @@ uint16_t POP::register_pair(CPU& cpu, MemoryBus& memory_bus, Register first, Reg
     } else{
         cpu.f(memory_bus.read_from_memory(increment_sp));
     }
-    
+
     memory_bus.write_to_memory(increment_sp, 0);
 
     increment_sp = cpu.sp() + 1;
@@ -65,24 +69,31 @@ int16_t RET::standard(CPU& cpu, MemoryBus& memory_bus) {
 
 }
 
-int16_t RET::on_condition(CPU& cpu, MemoryBus& memory_bus, FlagState flag_state) {
+int16_t RET::run(CPU& cpu, MemoryBus& memory_bus, FlagState flag_state) {
     if (flag_state == ZeroOn) {
         if (cpu.flags[Zero]) {
-            return RET::standard(cpu, memory_bus);
+            return RET::run(cpu, memory_bus);
         }
     } else if(flag_state == ZeroOff) {
         if (!cpu.flags[Zero]) {
-            return RET::standard(cpu, memory_bus);
+            return RET::run(cpu, memory_bus);
         }
     } else if(flag_state == CarryOn) {
         if (cpu.flags[Carry]) {
-            return RET::standard(cpu, memory_bus);
+            return RET::run(cpu, memory_bus);
         }
     } else if(flag_state == CarryOff) {
         if (!cpu.flags[Carry]) {
-            return RET::standard(cpu, memory_bus);
+            return RET::run(cpu, memory_bus);
         }
     }
+
+    return cpu.pc() + 1;
+}
+
+int16_t RETI::run(CPU& cpu, MemoryBus& memory_bus) {
+    EI::run(cpu);
+    RET::run(cpu, memory_bus);
 
     return cpu.pc() + 1;
 }
