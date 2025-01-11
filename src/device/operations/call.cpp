@@ -40,3 +40,12 @@ uint16_t address_if_flag_state(CPU& cpu, MemoryBus& memory_bus, FlagState flag_s
     return cpu.pc() + 3;
 
 }
+
+uint16_t RST::vector(CPU& cpu, MemoryBus& memory_bus, Vector vector) {
+
+    auto address = vector_values[vector];
+
+    CALL::address(cpu, memory_bus, address);
+
+    return cpu.pc() + 1;
+}
