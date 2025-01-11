@@ -11,7 +11,7 @@
 
 enum Modifier {
     Inc, Dec
-}
+};
 
 namespace LD {
     uint16_t single_from_single(CPU& cpu, Register in_register, Register load_register);
