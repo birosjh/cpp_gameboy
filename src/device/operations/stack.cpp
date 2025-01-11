@@ -1,6 +1,8 @@
 #include "stack.h"
 
-uint16_t POP::register_pair(CPU& cpu, MemoryBus& memory_bus, Register first, Register second) {
+// PUSH Operations
+
+uint16_t PUSH::register_pair(CPU& cpu, MemoryBus& memory_bus, Register first, Register second) {
 
     auto decremented_sp = cpu.sp() - 1;
     
@@ -15,7 +17,9 @@ uint16_t POP::register_pair(CPU& cpu, MemoryBus& memory_bus, Register first, Reg
     return cpu.pc() + 1;
 }
 
-uint16_t PUSH::register_pair(CPU& cpu, MemoryBus& memory_bus, Register first, Register second) {
+// POP Operations
+
+uint16_t POP::register_pair(CPU& cpu, MemoryBus& memory_bus, Register first, Register second) {
 
     auto increment_sp = cpu.sp();
     
@@ -30,6 +34,50 @@ uint16_t PUSH::register_pair(CPU& cpu, MemoryBus& memory_bus, Register first, Re
     increment_sp += 1;
 
     cpu.sp(increment_sp);
+
+    return cpu.pc() + 1;
+}
+
+// RET Operations
+
+int16_t RET::standard(CPU& cpu, MemoryBus& memory_bus) {
+
+    auto increment_sp = cpu.sp();
+    
+    auto second = memory_bus.read_from_memory(increment_sp);
+    memory_bus.write_to_memory(increment_sp, 0);
+
+    increment_sp = cpu.sp() + 1;
+
+    auto first = memory_bus.read_from_memory(increment_sp);
+    memory_bus.write_to_memory(increment_sp, 0);
+
+    increment_sp += 1;
+
+    cpu.sp(increment_sp);
+
+    return cpu.pc() + 1;
+
+}
+
+int16_t RET::on_condition(CPU& cpu, MemoryBus& memory_bus, FlagState flag_state) {
+    if (flag_state == ZeroOn) {
+        if (cpu.flags[Zero]) {
+            return RET::standard(cpu, memory_bus);
+        }
+    } else if(flag_state == ZeroOff) {
+        if (!cpu.flags[Zero]) {
+            return RET::standard(cpu, memory_bus);
+        }
+    } else if(flag_state == CarryOn) {
+        if (cpu.flags[Carry]) {
+            return RET::standard(cpu, memory_bus);
+        }
+    } else if(flag_state == CarryOff) {
+        if (!cpu.flags[Carry]) {
+            return RET::standard(cpu, memory_bus);
+        }
+    }
 
     return cpu.pc() + 1;
 }
