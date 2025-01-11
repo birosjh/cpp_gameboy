@@ -71,6 +71,9 @@ class CPU {
         uint8_t f();
         void f(uint8_t);
 
+        void enable_ime();
+        void disable_ime();
+
 
 };
 
