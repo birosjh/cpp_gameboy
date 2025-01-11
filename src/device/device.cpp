@@ -1,4 +1,16 @@
 #include "device.h"
+#include "operations/bool.h"
+#include "operations/compare.h"
+#include "operations/general.h"
+#include "operations/increment.h"
+#include "operations/jump.h"
+#include "operations/math.h"
+#include "operations/rotate.h"
+#include "operations/stack.h"
+#include "operations/load.h"
+#include "operations/compare.h"
+#include "operations/call.h"
+
 
 Device::Device(Cartridge cartridge) :
     current_game(cartridge),
@@ -12,508 +24,513 @@ Device::Device(Cartridge cartridge) :
 
 void Device::run() {
     while(true) {
+
+        uint16_t value;
         // Get next opcode
-        auto code = read_from_memory(cpu.pc());
+        int code = read_from_memory(cpu.pc());
         // Execute opcode
-        auto new_location = execute();
+        auto new_location = execute(code, value);
 
         // Update program counter
         cpu.pc(new_location);
     }
 }
 
-uint16_t Device::execute(const int code) {
+uint16_t Device::execute(const int code, int16_t value) {
 
     switch(code) {
         case 0: // NOP
-            return NOP();
+            return NOP::run(cpu);
         case 1:
-            return LD_16bit("bc");
+            return LD::double_from_value(cpu, BC, value);
         case 2:
-            return LD_8bit_to_address("bc", "a");
+            return LD::to_address_from_single(cpu, memory_bus, BC, A);
         case 3:
-            return INC_16bit("bc");
+            return INC::pair(cpu, BC);
         case 4:
-            return INC_8bit("b");
+            return INC::single(cpu, B);
         case 5:
-            return DEC_8bit("b");
+            return DEC::single(cpu, B);
         case 6:
-            return LD_8bit("b");
+            return LD::single_from_value(cpu, B, value);
         case 7:
-            return RLC("a");
+            return Rotate::RLC(cpu, A);
         case 8:
-            return LD_16bit_to_next("sp");
+            return LD::double_from_value(cpu, SP, value);
         case 9:
-            return ADD_16bit("hl", "bc");
+            return ADD::double_registers(cpu, HL, BC);
         case 10:
-            return LD_8bit_from_address("a", "bc");
+            return LD::single_from_address(cpu, memory_bus, A, BC);
         case 11:
-            return DEC_16bit("bc");
+            return DEC::pair(cpu, BC);
         case 12:
-            return INC_8bit("c");
+            return INC::single(cpu, C);
         case 13:
-            return DEC_8bit("c");
+            return DEC::single(cpu, C);
         case 14:
-            return LD_8bit("c");
+            return LD::single_from_value(cpu, C, value);
         case 15:
-            return RRC("a");
+            return Rotate::RRC(cpu, A);
         case 16:
-            return STOP();
+            return STOP::run(cpu);
         case 17:
-            return LD_16bit("de");
+            return LD::double_from_value(cpu, DE, value);
         case 18:
-            return LD_8bit_to_address("a", "de");
+            return LD::to_address_from_single(cpu, memory_bus, DE, A);
         case 19:
-            return INC_16bit("de");
+            return INC::pair(cpu, DE);
         case 20:
-            return INC_8bit("d");
+            return INC::single(cpu, D);
         case 21:
-            return DEC_8bit("d");
+            return DEC::single(cpu, D);
         case 22:
-            return LD_8bit("d");
+            return LD::single_from_value(cpu, D, value);
         case 23:
-            return RL("a");
+            return Rotate::RL(cpu, A);
         case 24:
-            return JR();
+            return JR::by_adding(cpu, value);
         case 25:
-            return ADD_16bit("hl", "de");
+            return ADD::double_registers(cpu, HL, DE);
         case 26:
-            return LD_8bit_from_address("a", "de");
+            return LD::single_from_address(cpu, memory_bus, A, DE);
         case 27:
-            return DEC_16bit("de");
+            return DEC::pair(cpu, DE);
         case 28:
-            return INC_8bit("e");
+            return INC::single(cpu, E);
         case 29:
-            return DEC_8bit("e");
+            return DEC::single(cpu, E);
         case 30:
-            return LD_8bit("e");
+            return LD::single_from_value(cpu, E, value);
         case 31:
-            return RR("a");
+            return Rotate::RR(cpu, A);
         case 32:
-            return JR("nz");
+            return JR::by_adding_if_not_flag(cpu, Zero, value);
         case 33:
-            return LD_16bit("hl");
+            return LD::double_from_value(cpu, HL, value);
         case 34:
-            return LD_8bit_to_address("hl+", "a");
+            return LD::to_address_from_single(cpu, memory_bus, HL, A, I);
         case 35:
-            return INC_16bit("hl");
+            return INC::pair(cpu, HL);
         case 36:
-            return INC_8bit("h");
+            return INC::single(cpu, H);
         case 37:
-            return DEC_8bit("h");
+            return DEC::single(cpu, H);
         case 38:
-            return LD_8bit("h");
+            return LD::single_from_value(cpu, H, value);
         case 39:
-            return DAA();
+            return DAA::run(cpu);
         case 40:
-            return JR("z")
+            return JR::by_adding_if_flag(cpu, Zero, value);
         case 41:
-            return ADD_16bit("hl", "hl");
+            return ADD::double_registers(cpu, HL, HL);
         case 42:
-            return LD_8bit_from_address("a", "+", "hl");
+            return LD::single_from_address(cpu, memory_bus, A, HL, I);
         case 43:
-            return DEC_16bit("hl");
+            return DEC::pair(cpu, HL);
         case 44:
-            return INC_8bit("l");
+            return INC::single(cpu, L);
         case 45:
-            return DEC_8bit("l");
+            return DEC::single(cpu, L);
         case 46:
-            return LD_8bit("l");
+            return LD::single_from_value(cpu, L, value);
         case 47:
-            return CPL();
+            return CPL::run(cpu);
         case 48:
-            return JR("nc");
+            return JR::by_adding_if_not_flag(cpu, Carry, value);
         case 49:
-            return LD_16bit("SP");
+            return LD::double_from_value(cpu, SP, value);
         case 50:
-            return LD_8bit_to_address("hl", "-", "a");
+            return LD::to_address_from_single(cpu, memory_bus, HL, A, Dec);
         case 51:
-            return INC_16bit("sp");
+            return INC::pair(cpu, SP);
         case 52:
-            return INC_address("hl");
+            return INC::address(cpu, memory_bus, HL);
         case 53:
-            return DEC_address("hl");
+            return DEC::address(cpu, memory_bus, HL);
         case 54:
-            return LD_8bit_to_address("hl");
+            return LD::double_from_value(cpu, HL, value);
         case 55:
-            return SCF();
+            return SCF::run(cpu);
         case 56:
-            return JR("c");
+            return JR::by_adding_if_flag(cpu, Carry, value);
         case 57:
-            return ADD("hl", "sp");
+            return ADD::double_registers(cpu, HL, SP);
         case 58:
-            return LD_8bit_from_address("a", "-", "hl");
+            return LD::single_from_address(cpu, memory_bus, A, HL, Dec);
         case 59:
-            return DEC_16bit("sp");
+            return DEC::pair(cpu, SP);
         case 60:
-            return INC_8bit("a");
+            return INC::single(cpu, A);
         case 61:
-            return DEC_8bit("a");
+            return DEC::single(cpu, A);
         case 62:
-            return LD_8bit("a");
+            return LD::single_from_value(cpu, A, value);
         case 63:
-            return CCF();
+            return CCF::run(cpu);
         case 64:
-            return LD_8bit("b", "b");
+            return LD::single_from_single(cpu, B, B);
         case 65:
-            return LD_8bit("b", "c");
+            return LD::single_from_single(cpu, B, C);
         case 66:
-            return LD_8bit("b", "d");
+            return LD::single_from_single(cpu, B, D);
         case 67:
-            return LD_8bit("b", "e");
+            return LD::single_from_single(cpu, B, E);
         case 68:
-            return LD_8bit("b", "h");
+            return LD::single_from_single(cpu, B, H);
         case 69:
-            return LD_8bit("b", "l");
+            return LD::single_from_single(cpu, B, L);
         case 70:
-            return LD_8bit_from_address("b", "hl");
+            return LD::single_from_address(cpu, memory_bus, B, HL);
         case 71:
-            return LD_8bit("b", "a");
+            return LD::single_from_single(cpu, B, A);
         case 72:
-            return LD_8bit("c", "b");
+            return LD::single_from_single(cpu, C, B);
         case 73:
-            return LD_8bit("c", "c");
+            return LD::single_from_single(cpu, C, C);
         case 74:
-            return LD_8bit("c", "d");
+            return LD::single_from_single(cpu, C, D);
         case 75:
-            return LD_8bit("c", "e");
+            return LD::single_from_single(cpu, C, E);
         case 76:
-            return LD_8bit("c", "h");
+            return LD::single_from_single(cpu, C, H);
         case 77:
-            return LD_8bit("c", "l");
+            return LD::single_from_single(cpu, C, L);
         case 78:
-            return LD_8bit_from_address("c", "hl");
+            return LD::single_from_address(cpu, memory_bus, C, HL);
         case 79:
-            return LD_8bit("c", "a");
+            return LD::single_from_single(cpu, C, L);
         case 80:
-            return LD_8bit("d", "b");
+            return LD::single_from_single(cpu, D, B);
         case 81:
-            return LD_8bit("d", "c");
+            return LD::single_from_single(cpu, D, C);
         case 82:
-            return LD_8bit("d", "d");
+            return LD::single_from_single(cpu, D, D);
         case 83:
-            return LD_8bit("d", "e");
+            return LD::single_from_single(cpu, D, E);
         case 84:
-            return LD_8bit("d", "h");
+            return LD::single_from_single(cpu, D, H);
         case 85:
-            return LD_8bit("d", "l");
+            return LD::single_from_single(cpu, D, L);
         case 86:
-            return LD_8bit_from_address("d", "hl");
+            return LD::single_from_address(cpu, memory_bus, D, HL);
         case 87:
-            return LD_8bit("d", "a");
+            return LD::single_from_single(cpu, D, A);
         case 88:
-            return LD_8bit("e", "b");
+            return LD::single_from_single(cpu, E, B);
         case 89:
-            return LD_8bit("e", "c");
+            return LD::single_from_single(cpu, E, C);
         case 90:
-            return LD_8bit("e", "d");
+            return LD::single_from_single(cpu, E, D);
         case 91:
-            return LD_8bit("e", "e");
+            return LD::single_from_single(cpu, E, E);
         case 92:
-            return LD_8bit("e", "h");
+            return LD::single_from_single(cpu, E, H);
         case 93:
-            return LD_8bit("e", "l");
+            return LD::single_from_single(cpu, E, L);
         case 94:
-            return LD_8bit_from_address("e", "hl");
+            return LD::single_from_address(cpu, memory_bus, E, HL);
         case 95:
-            return LD_8bit("h", "a");
+            return LD::single_from_single(cpu, E, A);
         case 96:
-            return LD_8bit("h", "b");
+            return LD::single_from_single(cpu, H, B);
         case 97:
-            return LD_8bit("h", "c");
+            return LD::single_from_single(cpu, H, C);
         case 98:
-            return LD_8bit("h", "d");
+            return LD::single_from_single(cpu, H, D);
         case 99:
-            return LD_8bit("h", "e");
+            return LD::single_from_single(cpu, H, E);
         case 100:
-            return LD_8bit("h", "h");
+            return LD::single_from_single(cpu, H, H);
         case 101:
-            return LD_8bit("h", "l");
+            return LD::single_from_single(cpu, H, L);
         case 102:
-            return LD_8bit_from_address("h", "hl");
+            return LD::single_from_address(cpu, memory_bus, H, HL);
         case 103:
-            return LD_8bit("h", "a");
+            return LD::single_from_single(cpu, H, A);
         case 104:
-            return LD_8bit("l", "b");
+            return LD::single_from_single(cpu, L, B);
         case 105:
-            return LD_8bit("l", "c");
+            return LD::single_from_single(cpu, L, C);
         case 106:
-            return LD_8bit("l", "d");
+            return LD::single_from_single(cpu, L, D);
         case 107:
-            return LD_8bit("l", "e");
+            return LD::single_from_single(cpu, L, E);
         case 108:
-            return LD_8bit("l", "h");
+            return LD::single_from_single(cpu, L, H);
         case 109:
-            return LD_8bit("l", "l");
+            return LD::single_from_single(cpu, L, L);
         case 110:
-            return LD_8bit_from_address("l", "hl");
+            return LD::single_from_address(cpu, memory_bus, L, HL);
         case 111:
-            return LD_8bit("l", "a");
+            return LD::single_from_single(cpu, L, A);
         case 112:
-            return LD_8bit_to_address("hl", "b");
+            return LD::to_address_from_single(cpu, memory_bus, HL, B);
         case 113:
-            return LD_8bit_to_address("hl", "c");
+            return LD::to_address_from_single(cpu, memory_bus, HL, C);
         case 114:
-            return LD_8bit_to_address("hl", "d");
+            return LD::to_address_from_single(cpu, memory_bus, HL, D);
         case 115:
-            return LD_8bit_to_address("hl", "e");
+            return LD::to_address_from_single(cpu, memory_bus, HL, E);
         case 116:
-            return LD_8bit_to_address("hl", "h");
+            return LD::to_address_from_single(cpu, memory_bus, HL, H);
         case 117:
-            return LD_8bit_to_address("hl", "l");
+            return LD::to_address_from_single(cpu, memory_bus, HL, L);
         case 118:
-            return HALT();
+            return HALT::run(cpu);
         case 119:
-            return LD_8bit_to_address("hl", "a");
+            return LD::to_address_from_single(cpu, memory_bus, HL, A);
         case 120:
-            return LD_8bit("a", "b");
+            return LD::single_from_single(cpu, A, B);
         case 121:
-            return LD_8bit("a", "c");
+            return LD::single_from_single(cpu, A, C);
         case 122:
-            return LD_8bit("a", "d");
+            return LD::single_from_single(cpu, A, D);
         case 123:
-            return LD_8bit("a", "e");
+            return LD::single_from_single(cpu, A, E);
         case 124:
-            return LD_8bit("a", "h");
+            return LD::single_from_single(cpu, A, H);
         case 125:
-            return LD_8bit("a", "l");
+            return LD::single_from_single(cpu, A, L);
         case 126:
-            return LD_8bit_from_address("a", "hl");
+            return LD::single_from_address(cpu, memory_bus, A, HL);
         case 127:
-            return LD_8bit("a", "a");
+            return LD::single_from_single(cpu, A, A);
         case 128:
-            return ADD("a", "b");
+            return ADD::single_registers(cpu, A, B);
         case 129:
-            return ADD("a", "c");
+            return ADD::single_registers(cpu, A, C);
         case 130:
-            return ADD("a", "d");
+            return ADD::single_registers(cpu, A, D);
         case 131:
-            return ADD("a", "e");
+            return ADD::single_registers(cpu, A, E);
         case 132:
-            return ADD("a", "h");
+            return ADD::single_registers(cpu, A, H);
         case 133:
-            return ADD("a", "l");
+            return ADD::single_registers(cpu, A, L);
         case 134:
-            return ADD_from_address("a", "hl");
+            return ADD::to_single(cpu, memory_bus, A, HL);
         case 135:
-            return ADD("a", "a");
+            return ADD::single_registers(cpu, A, A);
         case 136:
-            return ADC("a", "b");
+            return ADC::single_registers(cpu ,A, B);
         case 137:
-            return ADC("a", "c");
+            return ADC::single_registers(cpu ,A, C);
         case 138:
-            return ADC("a", "d");
+            return ADC::single_registers(cpu ,A, D);
         case 139:
-            return ADC("a", "e");
+            return ADC::single_registers(cpu ,A, E);
         case 140:
-            return ADC("a", "h");
+            return ADC::single_registers(cpu ,A, H);
         case 141:
-            return ADC("a", "l");
+            return ADC::single_registers(cpu ,A, L);
         case 142:
-            return ADC_from_address("a", "hl");
+            return ADC::to_single(cpu, memory_bus, A, HL);
         case 143:
-            return ADC("a", "a");
+            return ADC::single_registers(cpu ,A, A);
         case 144:
-            return SUB("a", "b");
+            return SUB::single_registers(cpu ,A, B);
         case 145:
-            return SUB("a", "c");
+            return SUB::single_registers(cpu ,A, C);
         case 146:
-            return SUB("a", "d");
+            return SUB::single_registers(cpu ,A, D);
         case 147:
-            return SUB("a", "e");
+            return SUB::single_registers(cpu ,A, E);
         case 148:
-            return SUB("a", "h");
+            return SUB::single_registers(cpu ,A, H);
         case 149:
-            return SUB("a", "l");
+            return SUB::single_registers(cpu ,A, L);
         case 150:
-            return SUB_from_address("a", "hl");
+            return SUB::from_single(cpu, memory_bus, A, HL);
         case 151:
-            return SUB("a", "a");
+            return SUB::single_registers(cpu ,A, A);
         case 152:
-            return SBC("a", "b");
+            return SBC::single_registers(cpu ,A, B);
         case 153:
-            return SBC("a", "c");
+            return SBC::single_registers(cpu ,A, C);
         case 154:
-            return SBC("a", "d");
+            return SBC::single_registers(cpu ,A, D);
         case 155:
-            return SBC("a", "e");
+            return SBC::single_registers(cpu ,A, E);
         case 156:
-            return SBC("a", "h");
+            return SBC::single_registers(cpu ,A, H);
         case 157:
-            return SBC("a", "l");
+            return SBC::single_registers(cpu ,A, L);
         case 158:
-            return SBC_from_address("a", "hl");
+            return SBC::from_single(cpu, memory_bus, A, HL);
         case 159:
-            return SBC("a", "a");
+            return SBC::single_registers(cpu ,A, A);
         case 160:
-            return AND("a", "b");
+            return AND::with_register(cpu, B);
         case 161:
-            return AND("a", "c");
+            return AND::with_register(cpu, C);
         case 162:
-            return AND("a", "d");
+            return AND::with_register(cpu, D);
         case 163:
-            return AND("a", "e");
+            return AND::with_register(cpu, E);
         case 164:
-            return AND("a", "h");
+            return AND::with_register(cpu, H);
         case 165:
-            return AND("a", "l");
+            return AND::with_register(cpu, L);
         case 166:
-            return AND_from_address("a", "hl");
+            return AND::with_address(cpu, memory_bus, HL);
         case 167:
-            return AND("a", "a");
+            return AND::with_register(cpu, A);
         case 168:
-            return XOR("a", "b");
+            return XOR::with_register(cpu, B);
         case 169:
-            return XOR("a", "c");
+            return XOR::with_register(cpu, C);
         case 170:
-            return XOR("a", "d");
+            return XOR::with_register(cpu, D);
         case 171:
-            return XOR("a", "e");
+            return XOR::with_register(cpu, E);
         case 172:
-            return XOR("a", "h");
+            return XOR::with_register(cpu, H);
         case 173:
-            return XOR("a", "l");
+            return XOR::with_register(cpu, L);
         case 174:
-            return XOR_from_address("a", "hl");
+            return XOR::with_address(cpu, memory_bus, HL);
         case 175:
-            return XOR("a", "a");
+            return XOR::with_register(cpu, A);
         case 176:
-            return OR("a", "b");
+            return OR::with_register(cpu, B);
         case 177:
-            return OR("a", "c");
+            return OR::with_register(cpu, C);
         case 178:
-            return OR("a", "d");
+            return OR::with_register(cpu, D);
         case 179:
-            return OR("a", "e");
+            return OR::with_register(cpu, E);
         case 180:
-            return OR("a", "h");
+            return OR::with_register(cpu, H);
         case 181:
-            return OR("a", "l");
+            return OR::with_register(cpu, L);
         case 182:
-            return OR_from_address("a", "hl");
+            return OR::with_address(cpu, memory_bus, HL);
         case 183:
-            return OR("a", "a");
+            return OR::with_register(cpu, A);
         case 184:
-            return CP("a", "b");
+            return CP::to_register(cpu, B);
         case 185:
-            return CP("a", "c");
+            return CP::to_register(cpu, C);
         case 186:
-            return CP("a", "d");
+            return CP::to_register(cpu, D);
         case 187:
-            return CP("a", "e");
+            return CP::to_register(cpu, E);
         case 188:
-            return CP("a", "h");
+            return CP::to_register(cpu, H);
         case 189:
-            return CP("a", "l");
+            return CP::to_register(cpu, L);
         case 190:
-            return CP_from_address("a", "hl");
+            return CP::to_address_value(cpu, memory_bus, HL);
         case 191:
-            return CP("a", "a");
+            return CP::to_register(cpu, A);
         case 192:
-            return RET("nz");
+            return RET::run(cpu, memory_bus, ZeroOff);
         case 193:
-            return POP("bc");
+            return POP::register_pair(cpu, memory_bus, B, C);
         case 194:
-            return JP("nz");
+            return JP::to_address_if_flag_state(cpu, ZeroOff, value);
         case 195:
-            return JP();
+            return JP::to_address(cpu, value);
         case 196:
-            return CALL("nz");
+            return CALL::address_if_flag_state(cpu, memory_bus, ZeroOff, value);
         case 197:
-            return PUSH("bc");
+            return PUSH::register_pair(cpu, memory_bus, B, C);
         case 198:
-            return ADD("a");
+            return ADD::to_single(cpu, memory_bus, A, value);
         case 199:
-            return RST("00h");
+            return RST::vector(cpu, memory_bus, x00);
         case 200:
-            return RET("z");
+            return RET::run(cpu, memory_bus, ZeroOn);
         case 201:
-            return RET();
+            return RET::run(cpu, memory_bus);
         case 202:
-            return JP("z");
+            return JP::to_address_if_flag_state(cpu, ZeroOn, value);
         case 203:
-            return PREFIX()
+            return PREFIX();
         case 204:
-            return CALL("z");
+            return CALL::address_if_flag_state(cpu, memory_bus, ZeroOn, value);
         case 205:
-            return CALL();
+            return CALL::address(cpu, memory_bus, value);
         case 206:
-            return ADC("a"),
+            return ADC::to_single(cpu, A, value);
         case 207:
-            return RST("08h");
+            return RST::vector(cpu, memory_bus, x08);
         case 208:
-            return RET("nc");
+            return RET::run(cpu, memory_bus, CarryOff);
         case 209:
-            return POP("de");
+            return POP::register_pair(cpu, memory_bus, D, E);
         case 210:
-            return JP("nc");
+            return JP::to_address_if_flag_state(cpu, CarryOff, value);
         case 212:
-            return CALL("nc");
+            return CALL::address_if_flag_state(cpu, memory_bus, CarryOff, value);
         case 213:
-            return PUSH("de");
+            return PUSH::register_pair(cpu, memory_bus, D, E);
         case 214:
-            return SUB("a");
+            return SUB::from_single(cpu, A, value);
         case 215:
-            return RST("10h");
+            return RST::vector(cpu, memory_bus, x10);
         case 216:
-            return RET("c");
+            return RET::run(cpu, memory_bus, CarryOn);
         case 217:
-            return RETI();
+            return RETI::run(cpu, memory_bus);
         case 218:
-            return JP("c");
+            return JP::to_address_if_flag_state(cpu, CarryOn, value);
         case 220:
-            return CALL("c");
+            return CALL::address_if_flag_state(cpu, memory_bus, CarryOn, value);
         case 222:
-            return SBC("a");
+            return SBC::from_single(cpu, A, value);
         case 223:
-            return RST("18h");
+            return RST::vector(cpu, memory_bus, x18);
         case 224:
-            return LD_special("a");
+            return LDIO::to_io_address_from_single(cpu, memory_bus, value, A);
         case 225:
-            return POP("hl");
+            return POP::register_pair(cpu, memory_bus, H, L);
         case 226:
-            return LD_special("c", "a");
+            return LDIO::to_io_single_from_single(cpu, memory_bus, C, A);
         case 229:
-            return PUSH("hl");
+            return PUSH::register_pair(cpu, memory_bus, H, L);
         case 230:
-            return ADD("a");
+            return ADD::to_single(cpu, A, value);
         case 231:
-            return RST("20h");
+            return RST::vector(cpu, memory_bus, x20);
         case 232:
-            return ADD_16bit("sp");
+            return ADD::signed_integer(cpu, SP, value);
         case 233:
-            return JP("hl");
+            return JP::to_address(cpu, HL);
         case 234:
-            return LD_8bit_to_address("a");
+            return LD::to_address_from_single(cpu, memory_bus, value, A);
         case 238:
-            return XOR("a");
+            return XOR::with_value(cpu, value);
         case 239:
-            return RST("28h");
+            return RST::vector(cpu, memory_bus, x28);
         case 240:
-            return LD_special("a");
+            return LDIO::to_single_from_io_address(cpu, memory_bus, A, value);
         case 241:
-            return POP("AF");
+            return POP::register_pair(cpu, memory_bus, A, F);
         case 242:
-            return DI();
-        case 244:
-            return PUSH("af");
+            return LDIO::to_single_from_io_single(cpu, memory_bus, A, C);
+        case 243:
+            return DI::run(cpu);
         case 245:
-            return OR("a");
+            return PUSH::register_pair(cpu, memory_bus, A, F);
         case 246:
-            return RST("30h");
+            return OR::with_value(cpu, value);
         case 247:
-            return LD_and_increment("hl", "sp");
+            return RST::vector(cpu, memory_bus, x30);
         case 248:
-            return LD_16bit("sp", "hl");
+            return LD::double_from_double(cpu, HL, SP, value);
         case 249:
-            return EI();
+            return LD::double_from_double(cpu, SP, HL);
+        case 250: 
+            return LD::single_from_value(cpu, A, value);
+        case 251:
+            return EI::run(cpu);
         case 252:
-            CP("a");
+            CP::to_value(cpu, value);
         case 253:
-            RST("38h");
-        
+            RST::vector(cpu, memory_bus, x38);
         default:
-            std::cerr << code << " does not exist." std::endl;
+            std::cerr << code << " does not exist." << std::endl;
     }
 
 }

@@ -13,12 +13,12 @@ class Device {
         MemoryBus memory_bus;
         Cartridge current_game;
 
-        // Add/Subtract Operation Functions
+        int read_from_memory(int16_t program_counter);
 
     public:
         Device(Cartridge cartridge);
 
-        uint16_t execute(const int code);
+        uint16_t execute(const int code, uint16_t value);
 
         void run();
 
