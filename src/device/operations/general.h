@@ -2,6 +2,8 @@
 #include <cstdint>
 
 #include "cpu.h"
+#include "memory_bus.h"
+#include "prefix_handler.h"
 
 namespace NOP {
     // General Operation Functions
@@ -38,4 +40,8 @@ namespace DI {
 
 namespace EI {
     uint16_t run(CPU& cpu);
+}
+
+namespace PREFIX {
+    uint16_t run(CPU& cpu, MemoryBus& memory_bus, uint8_t value);
 }

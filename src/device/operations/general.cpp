@@ -70,3 +70,24 @@ uint16_t DAA::run(CPU& cpu) {
 
     return cpu.pc() + 1;
 }
+
+uint16_t EI::run(CPU& cpu) {
+
+    cpu.enable_ime();
+
+    return cpu.pc() + 1;
+}
+
+uint16_t DI::run(CPU& cpu) {
+
+    cpu.enable_ime();
+
+    return cpu.pc() + 1;
+}
+
+uint16_t PREFIX::run(CPU& cpu, MemoryBus& memory_bus, uint8_t value) {
+
+    PREFIX_HANDLER::handle(cpu, memory_bus, value);
+
+    return cpu.pc() + 2;
+}
