@@ -1,13 +1,41 @@
 #include <string>
 #include <cstdint>
 
-namespace General {
-    // General Operation Functions
-    uint16_t NOP(CPU& cpu);
-    uint16_t STOP(CPU& cpu);
-    uint16_t HALT(CPU& cpu);
-    // Jump Operation Functions
+#include "cpu.h"
 
-    uint16_t JR(CPU& cpu);
-    uint16_t JP(CPU& cpu);
+namespace NOP {
+    // General Operation Functions
+    uint16_t run(CPU& cpu);
+}
+
+namespace STOP {
+    uint16_t run(CPU& cpu);
+}
+
+namespace HALT {
+    uint16_t run(CPU& cpu);
+}
+
+namespace SCF {
+    uint16_t run(CPU& cpu);
+}
+
+namespace CPL {
+    uint16_t run(CPU& cpu);
+}
+
+namespace DAA {
+    uint16_t run(CPU& cpu);
+}
+
+namespace CCF {
+    uint16_t run(CPU& cpu);
+}
+
+namespace DI {
+    uint16_t run(CPU& cpu);
+}
+
+namespace EI {
+    uint16_t run(CPU& cpu);
 }
