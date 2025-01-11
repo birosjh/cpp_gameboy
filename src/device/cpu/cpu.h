@@ -9,6 +9,10 @@ enum Flag {
     Zero, Negative, HalfCarry, Carry
 };
 
+enum FlagState {
+    ZeroOff, ZeroOn, CarryOff, CarryOn // my wayward son
+};
+
 enum Register {
     A, B, C, D, E, H, L
 };
@@ -49,6 +53,7 @@ class CPU {
         
         uint16_t pc();
         void pc(uint16_t value);
+        void pc(uint8_t first, uint8_t second);
 
         uint16_t bc();
         void bc(uint16_t value);
