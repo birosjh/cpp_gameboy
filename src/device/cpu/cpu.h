@@ -14,7 +14,7 @@ enum FlagState {
 };
 
 enum Register {
-    A, B, C, D, E, H, L
+    A, B, C, D, E, H, L, F
 };
 
 enum DoubleRegister {
@@ -26,6 +26,7 @@ class CPU {
     private:
         uint16_t stack_pointer;
         uint16_t program_counter;
+        bool IME = false;
 
     public:
 
@@ -66,6 +67,10 @@ class CPU {
 
         uint16_t sp();
         void sp(uint16_t value);
+
+        uint8_t f();
+        void f(uint8_t);
+
 
 };
 

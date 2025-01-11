@@ -1,4 +1,31 @@
+#include <bitset>
+
 #include "cpu.h"
+// -----------------------------------------------
+// Flag Register Logic
+// -----------------------------------------------
+
+uint8_t CPU::f() {
+    typedef std::size_t position_t;
+
+    std::bitset<8> flag_bits;
+    flag_bits.set(position_t(7), flags[Zero]);
+    flag_bits.set(position_t(6), flags[Negative]);
+    flag_bits.set(position_t(5), flags[HalfCarry]);
+    flag_bits.set(position_t(4), flags[Carry]);
+
+    uint8_t flag_register = static_cast<uint8_t>(flag_bits.to_ulong());
+
+    return flag_register;
+}
+
+void CPU::f(uint8_t value) {
+    std::bitset<8> flag_bits(value);
+    flags[Zero] = flag_bits[7];
+    flags[Negative] = flag_bits[6];
+    flags[HalfCarry] = flag_bits[5];
+    flags[Carry] = flag_bits[4];
+}
 
 // -----------------------------------------------
 // 16 Bit Register Logic
@@ -45,6 +72,10 @@ uint16_t CPU::pc() {
 
 void CPU::pc(uint16_t value) {
     program_counter = value;
+}
+
+void CPU::pc(uint8_t first, uint8_t second) {
+    program_counter = ((uint16_t)second << 8) | first;
 }
 
 uint16_t CPU::double_register(DoubleRegister register_name) {
