@@ -25,7 +25,7 @@ uint16_t AND::with_register(CPU& cpu, Register compare_register) {
 
 uint16_t AND::with_address(CPU& cpu, MemoryBus& memory_bus, DoubleRegister address_register) {
 
-    auto address = cpu.double_registers[address_register]
+    auto address = cpu.double_register(address_register);
 
     auto value = memory_bus.read_from_memory(address);
 
@@ -60,7 +60,7 @@ uint16_t OR::with_register(CPU& cpu, Register compare_register) {
 
 uint16_t OR::with_address(CPU& cpu, MemoryBus& memory_bus, DoubleRegister address_register) {
 
-    auto address = cpu.double_registers[address_register]
+    auto address = cpu.double_register(address_register);
 
     auto value = memory_bus.read_from_memory(address);
 
@@ -95,7 +95,7 @@ uint16_t XOR::with_register(CPU& cpu, Register compare_register) {
 
 uint16_t XOR::with_address(CPU& cpu, MemoryBus& memory_bus, DoubleRegister address_register) {
 
-    auto address = cpu.double_registers[address_register]
+    auto address = cpu.double_register(address_register);
 
     auto value = memory_bus.read_from_memory(address);
 
