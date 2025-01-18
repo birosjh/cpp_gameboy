@@ -44,7 +44,9 @@ uint16_t LD::single_from_address(CPU& cpu, MemoryBus& memory_bus, Register in_re
     return cpu.pc() + 1;
 }
 
-uint16_t LD::single_from_value(CPU& cpu, Register in_register, uint8_t value) {
+uint16_t LD::single_from_value(CPU& cpu, MemoryBus& memory_bus, Register in_register) {
+
+    uint8_t value = memory_bus.get_next_in_memory(cpu);
 
     cpu.registers[in_register] = value;
 
@@ -71,7 +73,9 @@ uint16_t LD::to_address_from_single(CPU& cpu, MemoryBus& memory_bus, uint16_t ad
     return cpu.pc() + 1;
 }
 
-uint16_t LD::to_address_from_value(CPU& cpu, MemoryBus& memory_bus, DoubleRegister address_register, uint8_t value) {
+uint16_t LD::to_address_from_value(CPU& cpu, MemoryBus& memory_bus, DoubleRegister address_register) {
+
+    uint8_t value = memory_bus.get_next_in_memory(cpu);
 
     auto address = cpu.double_register(address_register);
 
@@ -97,7 +101,12 @@ uint16_t LD::to_address_from_single(CPU& cpu, MemoryBus& memory_bus, DoubleRegis
     return cpu.pc() + 1;
 }
 
-uint16_t LD::double_from_value(CPU& cpu, DoubleRegister in_register, uint16_t value) {
+uint16_t LD::double_from_value(CPU& cpu, MemoryBus& memory_bus, DoubleRegister in_register) {
+
+    uint8_t right_half = memory_bus.get_next_in_memory(cpu);
+    uint8_t left_half = memory_bus.get_next_in_memory(cpu);
+
+    uint16_t value = left_half | right_half << 8;
 
     cpu.double_register(in_register, value);
 
