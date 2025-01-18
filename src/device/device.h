@@ -6,6 +6,7 @@
 #include "cpu.h"
 #include "memory_bus.h"
 #include "cartridge.h"
+#include "operations_handler.h"
 
 class Device {
     private:
@@ -18,7 +19,7 @@ class Device {
     public:
         Device(Cartridge cartridge);
 
-        uint16_t execute(const int code, uint16_t value);
+        uint16_t execute(const int code);
 
         void run();
 
