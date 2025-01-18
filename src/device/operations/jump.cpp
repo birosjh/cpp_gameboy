@@ -7,6 +7,16 @@ uint16_t JP::to_address(CPU& cpu, uint16_t address) {
     return cpu.pc() + 3;
 }
 
+uint16_t JP::to_address_from_value(CPU& cpu, MemoryBus& memory_bus) {
+    uint8_t right_half = memory_bus.get_next_in_memory(cpu);
+    uint8_t left_half = memory_bus.get_next_in_memory(cpu);
+
+    uint16_t address = left_half | right_half << 8;
+
+    cpu.pc(address);
+    
+    return cpu.pc() + 3;
+}
 
 uint16_t JP::to_address_in_register(CPU& cpu, DoubleRegister in_register) {
     auto address = cpu.double_register(in_register);
