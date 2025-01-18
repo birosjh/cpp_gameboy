@@ -22,8 +22,8 @@ std::unordered_map<Vector, uint16_t> vector_values {
 
 namespace CALL {
 
-    uint16_t address(CPU& cpu, MemoryBus& memory_bus, uint16_t value);
-    uint16_t address_if_flag_state(CPU& cpu, MemoryBus& memory_bus, FlagState flag_state, uint16_t value);
+    uint16_t address_from_value(CPU& cpu, MemoryBus& memory_bus);
+    uint16_t address_from_value_if_flag_state(CPU& cpu, MemoryBus& memory_bus, FlagState flag_state);
 
 }
 
