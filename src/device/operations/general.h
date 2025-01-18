@@ -3,7 +3,6 @@
 
 #include "cpu.h"
 #include "memory_bus.h"
-#include "prefix_handler.h"
 
 namespace NOP {
     // General Operation Functions
