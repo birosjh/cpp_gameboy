@@ -13,7 +13,7 @@ namespace JP {
     uint16_t to_address(CPU& cpu, uint16_t address);
     uint16_t to_address_from_value(CPU& cpu, MemoryBus& memory_bus);
     uint16_t to_address_in_register(CPU& cpu, DoubleRegister in_register);
-    uint16_t to_address_if_flag_state(CPU& cpu, FlagState flag_state, uint16_t address);
+    uint16_t to_address_from_value_if_flag_state(CPU& cpu, MemoryBus& memory_bus, FlagState flag_state);
 }
 
 namespace JR {

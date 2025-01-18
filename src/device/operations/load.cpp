@@ -64,7 +64,12 @@ uint16_t LD::to_address_from_single(CPU& cpu, MemoryBus& memory_bus, DoubleRegis
     return cpu.pc() + 1;
 }
 
-uint16_t LD::to_address_from_single(CPU& cpu, MemoryBus& memory_bus, uint16_t address, Register load_register) {
+uint16_t LD::to_address_from_single(CPU& cpu, MemoryBus& memory_bus, Register load_register) {
+
+    uint8_t right_half = memory_bus.get_next_in_memory(cpu);
+    uint8_t left_half = memory_bus.get_next_in_memory(cpu);
+
+    uint16_t address = left_half | right_half << 8;
 
     auto value = cpu.registers[load_register];
 
@@ -121,10 +126,10 @@ uint16_t LD::double_from_double(CPU& cpu, DoubleRegister in_register, DoubleRegi
     return cpu.pc() + 1;
 }
 
-uint16_t LD::double_from_double(CPU& cpu, DoubleRegister in_register, DoubleRegister from_register, int8_t adjuster) {
+uint16_t LD::double_from_double(CPU& cpu, MemoryBus& memory_bus, DoubleRegister in_register, DoubleRegister from_register) {
 
     auto value = cpu.double_register(from_register);
-    value += adjuster;
+    value += memory_bus.get_next_in_memory(cpu);
 
     cpu.double_register(in_register, value);
 
@@ -146,7 +151,9 @@ uint16_t LDIO::to_io_single_from_single(CPU& cpu, MemoryBus& memory_bus, Registe
     return cpu.pc() + 1;
 }
 
-uint16_t to_io_address_from_single(CPU& cpu, MemoryBus& memory_bus, uint8_t io_address, Register value_register) {
+uint16_t to_io_address_from_single(CPU& cpu, MemoryBus& memory_bus, Register value_register) {
+
+    auto io_address = memory_bus.get_next_in_memory(cpu);
 
     uint16_t address = 0xFF00 + io_address;
 
@@ -157,7 +164,9 @@ uint16_t to_io_address_from_single(CPU& cpu, MemoryBus& memory_bus, uint8_t io_a
     return cpu.pc() + 1;
 }
 
-uint16_t to_single_from_io_address(CPU& cpu, MemoryBus& memory_bus, Register in_register, uint8_t io_address) {
+uint16_t to_single_from_io_address(CPU& cpu, MemoryBus& memory_bus, Register in_register) {
+
+    auto io_address = memory_bus.get_next_in_memory(cpu);
 
     uint16_t address = 0xFF00 + io_address;
 

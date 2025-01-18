@@ -26,23 +26,23 @@ uint16_t JP::to_address_in_register(CPU& cpu, DoubleRegister in_register) {
     return cpu.pc() + 1;
 }
 
-uint16_t JP::to_address_if_flag_state(CPU& cpu, FlagState flag_state, uint16_t address) {
+uint16_t JP::to_address_from_value_if_flag_state(CPU& cpu, MemoryBus& memory_bus, FlagState flag_state) {
 
     if (flag_state == ZeroOn) {
         if (cpu.flags[Zero]) {
-            return JP::to_address(cpu, address);
+            return JP::to_address_from_value(cpu, memory_bus);
         }
     } else if(flag_state == ZeroOff) {
         if (!cpu.flags[Zero]) {
-            return JP::to_address(cpu, address);
+            return JP::to_address_from_value(cpu, memory_bus);
         }
     } else if(flag_state == CarryOn) {
         if (cpu.flags[Carry]) {
-            return JP::to_address(cpu, address);
+            return JP::to_address_from_value(cpu, memory_bus);
         }
     } else if(flag_state == CarryOff) {
         if (!cpu.flags[Carry]) {
-            return JP::to_address(cpu, address);
+            return JP::to_address_from_value(cpu, memory_bus);
         }
     }
 

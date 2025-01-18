@@ -2,7 +2,7 @@
 
 // AND Ops
 
-uint16_t AND::with_value(CPU& cpu, uint8_t value) {
+uint16_t OR::with(CPU& cpu, uint8_t value) {
 
     cpu.registers[A] = cpu.registers[A] & value;
 
@@ -13,11 +13,19 @@ uint16_t AND::with_value(CPU& cpu, uint8_t value) {
 
 }
 
+uint16_t AND::with_value(CPU& cpu, MemoryBus& memory_bus) {
+
+    uint8_t value = memory_bus.get_next_in_memory(cpu);
+
+    OR::with(cpu, value);
+
+}
+
 uint16_t AND::with_register(CPU& cpu, Register compare_register) {
 
     auto value = cpu.registers[compare_register];
 
-    AND::with_value(cpu, value);
+    AND::with(cpu, value);
 
     return cpu.pc() + 1;
 }
@@ -29,7 +37,7 @@ uint16_t AND::with_address(CPU& cpu, MemoryBus& memory_bus, DoubleRegister addre
 
     auto value = memory_bus.read_from_memory(address);
 
-    AND::with_value(cpu, value);
+    AND::with(cpu, value);
 
     return cpu.pc() + 1;
 
@@ -37,7 +45,7 @@ uint16_t AND::with_address(CPU& cpu, MemoryBus& memory_bus, DoubleRegister addre
 
 // OR Ops
 
-uint16_t OR::with_value(CPU& cpu, uint8_t value) {
+uint16_t OR::with(CPU& cpu, uint8_t value) {
 
     cpu.registers[A] = cpu.registers[A] | value;
 
@@ -48,11 +56,21 @@ uint16_t OR::with_value(CPU& cpu, uint8_t value) {
 
 }
 
+uint16_t OR::with_value(CPU& cpu, MemoryBus& memory_bus) {
+
+    uint8_t value = memory_bus.get_next_in_memory(cpu);
+
+    OR::with(cpu, value);
+    
+    return cpu.pc() + 1;
+    
+}
+
 uint16_t OR::with_register(CPU& cpu, Register compare_register) {
 
     auto value = cpu.registers[compare_register];
 
-    OR::with_value(cpu, value);
+    OR::with(cpu, value);
 
     return cpu.pc() + 1;
 }
@@ -64,7 +82,7 @@ uint16_t OR::with_address(CPU& cpu, MemoryBus& memory_bus, DoubleRegister addres
 
     auto value = memory_bus.read_from_memory(address);
 
-    OR::with_value(cpu, value);
+    OR::with(cpu, value);
 
     return cpu.pc() + 1;
 
@@ -72,7 +90,7 @@ uint16_t OR::with_address(CPU& cpu, MemoryBus& memory_bus, DoubleRegister addres
 
 // XOR Ops
 
-uint16_t XOR::with_value(CPU& cpu, uint8_t value) {
+uint16_t XOR::with(CPU& cpu, uint8_t value) {
 
     cpu.registers[A] = cpu.registers[A] ^ value;
 
@@ -83,11 +101,20 @@ uint16_t XOR::with_value(CPU& cpu, uint8_t value) {
 
 }
 
+uint16_t XOR::with_value(CPU& cpu, MemoryBus& memory_bus) {
+
+    uint8_t value = memory_bus.get_next_in_memory(cpu);
+
+    XOR::with(cpu, value);
+    
+    return cpu.pc() + 1;
+}
+
 uint16_t XOR::with_register(CPU& cpu, Register compare_register) {
 
     auto value = cpu.registers[compare_register];
 
-    XOR::with_value(cpu, value);
+    XOR::with(cpu, value);
 
     return cpu.pc() + 1;
 }
@@ -99,7 +126,7 @@ uint16_t XOR::with_address(CPU& cpu, MemoryBus& memory_bus, DoubleRegister addre
 
     auto value = memory_bus.read_from_memory(address);
 
-    XOR::with_value(cpu, value);
+    XOR::with(cpu, value);
 
     return cpu.pc() + 1;
 

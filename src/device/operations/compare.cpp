@@ -1,6 +1,9 @@
 #include "compare.h"
 
-uint16_t CP::to_value(CPU& cpu, uint8_t value) {
+uint16_t CP::to_value(CPU& cpu, MemoryBus& memory_bus) {
+
+    auto value = memory_bus.get_next_in_memory(cpu);
+
     auto result = cpu.registers[A] - value;
 
     bool half_carry_occured = (((result & 0xF) + (value & 0xF)) & 0x10) == 0x10;
