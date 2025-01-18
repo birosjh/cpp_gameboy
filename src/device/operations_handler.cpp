@@ -19,7 +19,7 @@ uint16_t handle_operation(CPU& cpu, MemoryBus& memory_bus, uint8_t code) {
         case 0: // NOP
             return NOP::run(cpu);
         case 1:
-            return LD::double_from_value(cpu, BC, value);
+            return LD::double_from_value(cpu, memory_bus, BC);
         case 2:
             return LD::to_address_from_single(cpu, memory_bus, BC, A);
         case 3:
@@ -29,11 +29,11 @@ uint16_t handle_operation(CPU& cpu, MemoryBus& memory_bus, uint8_t code) {
         case 5:
             return DEC::single(cpu, B);
         case 6:
-            return LD::single_from_value(cpu, B, value);
+            return LD::single_from_value(cpu, memory_bus, B);
         case 7:
             return RLC::run(cpu, A);
         case 8:
-            return LD::double_from_value(cpu, SP, value);
+            return LD::double_from_value(cpu, memory_bus, SP);
         case 9:
             return ADD::double_registers(cpu, HL, BC);
         case 10:
@@ -45,13 +45,13 @@ uint16_t handle_operation(CPU& cpu, MemoryBus& memory_bus, uint8_t code) {
         case 13:
             return DEC::single(cpu, C);
         case 14:
-            return LD::single_from_value(cpu, C, value);
+            return LD::single_from_value(cpu, memory_bus, C);
         case 15:
             return RRC::run(cpu, A);
         case 16:
             return STOP::run(cpu);
         case 17:
-            return LD::double_from_value(cpu, DE, value);
+            return LD::double_from_value(cpu, memory_bus, DE);
         case 18:
             return LD::to_address_from_single(cpu, memory_bus, DE, A);
         case 19:
@@ -61,11 +61,11 @@ uint16_t handle_operation(CPU& cpu, MemoryBus& memory_bus, uint8_t code) {
         case 21:
             return DEC::single(cpu, D);
         case 22:
-            return LD::single_from_value(cpu, D, value);
+            return LD::single_from_value(cpu, memory_bus, D);
         case 23:
             return Rotate::RL(cpu, A);
         case 24:
-            return JR::by_adding(cpu, value);
+            return JR::by_adding(cpu, memory_bus);
         case 25:
             return ADD::double_registers(cpu, HL, DE);
         case 26:
@@ -77,15 +77,15 @@ uint16_t handle_operation(CPU& cpu, MemoryBus& memory_bus, uint8_t code) {
         case 29:
             return DEC::single(cpu, E);
         case 30:
-            return LD::single_from_value(cpu, E, value);
+            return LD::single_from_value(cpu, memory_bus, E);
         case 31:
             return Rotate::RR(cpu, A);
         case 32:
-            return JR::by_adding_if_not_flag(cpu, Zero, value);
+            return JR::by_adding_if_not_flag(cpu, memory_bus, Zero);
         case 33:
-            return LD::double_from_value(cpu, HL, value);
+            return LD::double_from_value(cpu, memory_bus, HL);
         case 34:
-            return LD::to_address_from_single(cpu, memory_bus, HL, A, I);
+            return LD::to_address_from_single(cpu, memory_bus, HL, A, Inc);
         case 35:
             return INC::pair(cpu, HL);
         case 36:
@@ -93,15 +93,15 @@ uint16_t handle_operation(CPU& cpu, MemoryBus& memory_bus, uint8_t code) {
         case 37:
             return DEC::single(cpu, H);
         case 38:
-            return LD::single_from_value(cpu, H, value);
+            return LD::single_from_value(cpu, memory_bus, H);
         case 39:
             return DAA::run(cpu);
         case 40:
-            return JR::by_adding_if_flag(cpu, Zero, value);
+            return JR::by_adding_if_flag(cpu, memory_bus, Zero);
         case 41:
             return ADD::double_registers(cpu, HL, HL);
         case 42:
-            return LD::single_from_address(cpu, memory_bus, A, HL, I);
+            return LD::single_from_address(cpu, memory_bus, A, HL, Inc);
         case 43:
             return DEC::pair(cpu, HL);
         case 44:
@@ -109,13 +109,13 @@ uint16_t handle_operation(CPU& cpu, MemoryBus& memory_bus, uint8_t code) {
         case 45:
             return DEC::single(cpu, L);
         case 46:
-            return LD::single_from_value(cpu, L, value);
+            return LD::single_from_value(cpu, memory_bus, L);
         case 47:
             return CPL::run(cpu);
         case 48:
-            return JR::by_adding_if_not_flag(cpu, Carry, value);
+            return JR::by_adding_if_not_flag(cpu, memory_bus, Carry);
         case 49:
-            return LD::double_from_value(cpu, SP, value);
+            return LD::double_from_value(cpu, memory_bus, SP);
         case 50:
             return LD::to_address_from_single(cpu, memory_bus, HL, A, Dec);
         case 51:
@@ -125,11 +125,11 @@ uint16_t handle_operation(CPU& cpu, MemoryBus& memory_bus, uint8_t code) {
         case 53:
             return DEC::address(cpu, memory_bus, HL);
         case 54:
-            return LD::double_from_value(cpu, HL, value);
+            return LD::double_from_value(cpu, memory_bus, HL);
         case 55:
             return SCF::run(cpu);
         case 56:
-            return JR::by_adding_if_flag(cpu, Carry, value);
+            return JR::by_adding_if_flag(cpu, memory_bus, Carry);
         case 57:
             return ADD::double_registers(cpu, HL, SP);
         case 58:
@@ -141,7 +141,7 @@ uint16_t handle_operation(CPU& cpu, MemoryBus& memory_bus, uint8_t code) {
         case 61:
             return DEC::single(cpu, A);
         case 62:
-            return LD::single_from_value(cpu, A, value);
+            return LD::single_from_value(cpu, memory_bus, A);
         case 63:
             return CCF::run(cpu);
         case 64:
@@ -405,15 +405,15 @@ uint16_t handle_operation(CPU& cpu, MemoryBus& memory_bus, uint8_t code) {
         case 193:
             return POP::register_pair(cpu, memory_bus, B, C);
         case 194:
-            return JP::to_address_if_flag_state(cpu, ZeroOff, value);
+            return JP::to_address_from_value_if_flag_state(cpu, memory_bus, ZeroOff);
         case 195:
-            return JP::to_address(cpu, value);
+            return JP::to_address_from_value(cpu, memory_bus);
         case 196:
-            return CALL::address_if_flag_state(cpu, memory_bus, ZeroOff, value);
+            return CALL::address_from_value_if_flag_state(cpu, memory_bus, ZeroOff);
         case 197:
             return PUSH::register_pair(cpu, memory_bus, B, C);
         case 198:
-            return ADD::to_single(cpu, memory_bus, A, value);
+            return ADD::value_to_single(cpu, memory_bus, A);
         case 199:
             return RST::vector(cpu, memory_bus, x00);
         case 200:
@@ -421,15 +421,15 @@ uint16_t handle_operation(CPU& cpu, MemoryBus& memory_bus, uint8_t code) {
         case 201:
             return RET::run(cpu, memory_bus);
         case 202:
-            return JP::to_address_if_flag_state(cpu, ZeroOn, value);
+            return JP::to_address_from_value_if_flag_state(cpu, memory_bus, ZeroOn);
         case 203:
-            return PREFIX::run(cpu, memory_bus, value);
+            return handle_prefixed_operation(cpu, memory_bus);
         case 204:
-            return CALL::address_if_flag_state(cpu, memory_bus, ZeroOn, value);
+            return CALL::address_from_value_if_flag_state(cpu, memory_bus, ZeroOn);
         case 205:
-            return CALL::address(cpu, memory_bus, value);
+            return CALL::address_from_value(cpu, memory_bus);
         case 206:
-            return ADC::to_single(cpu, A, value);
+            return ADC::value_to_single(cpu, memory_bus, A);
         case 207:
             return RST::vector(cpu, memory_bus, x08);
         case 208:
@@ -437,13 +437,13 @@ uint16_t handle_operation(CPU& cpu, MemoryBus& memory_bus, uint8_t code) {
         case 209:
             return POP::register_pair(cpu, memory_bus, D, E);
         case 210:
-            return JP::to_address_if_flag_state(cpu, CarryOff, value);
+            return JP::to_address_from_value_if_flag_state(cpu, memory_bus, CarryOff);
         case 212:
-            return CALL::address_if_flag_state(cpu, memory_bus, CarryOff, value);
+            return CALL::address_from_value_if_flag_state(cpu, memory_bus, CarryOff);
         case 213:
             return PUSH::register_pair(cpu, memory_bus, D, E);
         case 214:
-            return SUB::from_single(cpu, A, value);
+            return SUB::value_from_single(cpu, memory_bus, A);
         case 215:
             return RST::vector(cpu, memory_bus, x10);
         case 216:
@@ -451,15 +451,15 @@ uint16_t handle_operation(CPU& cpu, MemoryBus& memory_bus, uint8_t code) {
         case 217:
             return RETI::run(cpu, memory_bus);
         case 218:
-            return JP::to_address_if_flag_state(cpu, CarryOn, value);
+            return JP::to_address_from_value_if_flag_state(cpu, memory_bus, CarryOn);
         case 220:
-            return CALL::address_if_flag_state(cpu, memory_bus, CarryOn, value);
+            return CALL::address_from_value_if_flag_state(cpu, memory_bus, CarryOn);
         case 222:
-            return SBC::from_single(cpu, A, value);
+            return SBC::value_from_single(cpu, memory_bus, A);
         case 223:
             return RST::vector(cpu, memory_bus, x18);
         case 224:
-            return LDIO::to_io_address_from_single(cpu, memory_bus, value, A);
+            return LDIO::to_io_address_from_single(cpu, memory_bus, A);
         case 225:
             return POP::register_pair(cpu, memory_bus, H, L);
         case 226:
@@ -467,21 +467,21 @@ uint16_t handle_operation(CPU& cpu, MemoryBus& memory_bus, uint8_t code) {
         case 229:
             return PUSH::register_pair(cpu, memory_bus, H, L);
         case 230:
-            return ADD::to_single(cpu, A, value);
+            return ADD::value_to_single(cpu, memory_bus, A);
         case 231:
             return RST::vector(cpu, memory_bus, x20);
         case 232:
-            return ADD::signed_integer(cpu, SP, value);
+            return ADD::signed_integer(cpu, memory_bus, SP);
         case 233:
-            return JP::to_address(cpu, HL);
+            return JP::to_address_in_register(cpu, HL);
         case 234:
-            return LD::to_address_from_single(cpu, memory_bus, value, A);
+            return LD::to_address_from_single(cpu, memory_bus, A);
         case 238:
-            return XOR::with_value(cpu, value);
+            return XOR::with_value(cpu, memory_bus);
         case 239:
             return RST::vector(cpu, memory_bus, x28);
         case 240:
-            return LDIO::to_single_from_io_address(cpu, memory_bus, A, value);
+            return LDIO::to_single_from_io_address(cpu, memory_bus, A);
         case 241:
             return POP::register_pair(cpu, memory_bus, A, F);
         case 242:
@@ -491,19 +491,19 @@ uint16_t handle_operation(CPU& cpu, MemoryBus& memory_bus, uint8_t code) {
         case 245:
             return PUSH::register_pair(cpu, memory_bus, A, F);
         case 246:
-            return OR::with_value(cpu, value);
+            return OR::with_value(cpu, memory_bus);
         case 247:
             return RST::vector(cpu, memory_bus, x30);
         case 248:
-            return LD::double_from_double(cpu, HL, SP, value);
+            return LD::double_from_double(cpu, memory_bus, HL, SP);
         case 249:
             return LD::double_from_double(cpu, SP, HL);
         case 250: 
-            return LD::single_from_value(cpu, A, value);
+            return LD::single_from_value(cpu, memory_bus, A);
         case 251:
             return EI::run(cpu);
         case 252:
-            CP::to_value(cpu, value);
+            CP::to_value(cpu, memory_bus);
         case 253:
             RST::vector(cpu, memory_bus, x38);
         default:
@@ -511,7 +511,10 @@ uint16_t handle_operation(CPU& cpu, MemoryBus& memory_bus, uint8_t code) {
     }
 }
 
-void handle_prefixed_operation(CPU& cpu, MemoryBus& memory_bus, uint8_t command) {
+uint16_t handle_prefixed_operation(CPU& cpu, MemoryBus& memory_bus) {
+
+    auto command = memory_bus.get_next_in_memory(cpu);
+
     switch(command) {
         case 0:
             RLC::run(cpu, B);
