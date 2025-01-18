@@ -41,7 +41,9 @@ uint16_t JP::to_address_if_flag_state(CPU& cpu, FlagState flag_state, uint16_t a
 
 
 
-uint16_t JR::by_adding(CPU& cpu, uint8_t value) {
+uint16_t JR::by_adding(CPU& cpu, MemoryBus& memory_bus) {
+
+    auto value = memory_bus.get_next_in_memory(cpu);
 
     auto new_pc = cpu.pc() + value;
 
@@ -51,19 +53,23 @@ uint16_t JR::by_adding(CPU& cpu, uint8_t value) {
 }
 
 
-uint16_t JR::by_adding_if_flag(CPU& cpu, Flag flag, uint8_t value) {
+uint16_t JR::by_adding_if_flag(CPU& cpu, MemoryBus& memory_bus, Flag flag) {
+
+    auto value = memory_bus.get_next_in_memory(cpu);
 
     if (cpu.flags[flag]) {
-        JR::by_adding(cpu, value);
+        JR::by_adding(cpu, memory_bus);
     }
 
     return cpu.pc() + 2;
 }
 
-uint16_t JR::by_adding_if_not_flag(CPU& cpu, Flag flag, uint8_t value) {
+uint16_t JR::by_adding_if_not_flag(CPU& cpu, MemoryBus& memory_bus, Flag flag) {
+
+    auto value = memory_bus.get_next_in_memory(cpu);
 
     if (!cpu.flags[flag]) {
-        JR::by_adding(cpu, value);
+        JR::by_adding(cpu, memory_bus);
     }
 
     return cpu.pc() + 2;

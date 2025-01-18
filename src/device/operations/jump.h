@@ -16,9 +16,9 @@ namespace JP {
 }
 
 namespace JR {
-    uint16_t by_adding(CPU& cpu, uint8_t value);
-    uint16_t by_adding_if_flag(CPU& cpu, Flag flag, uint8_t value);
-    uint16_t by_adding_if_not_flag(CPU& cpu, Flag flag, uint8_t value)
+    uint16_t by_adding(CPU& cpu, MemoryBus& memory_bus);
+    uint16_t by_adding_if_flag(CPU& cpu, MemoryBus& memory_bus, Flag flag);
+    uint16_t by_adding_if_not_flag(CPU& cpu, MemoryBus& memory_bus, Flag flag);
 }
 
 #endif // JUMP_H
