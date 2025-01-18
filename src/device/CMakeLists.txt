@@ -1,4 +1,5 @@
 add_library(device STATIC device.cpp device.h)
+add_library(operations_handler STATIC operations_handler.cpp operations_handler.h)
 
 add_library(cpu STATIC ${CMAKE_CURRENT_SOURCE_DIR}/cpu/cpu.cpp ${CMAKE_CURRENT_SOURCE_DIR}/cpu/cpu.h)
 target_include_directories(cpu PUBLIC cpu)
@@ -16,8 +17,12 @@ add_library(operations STATIC
     ${OPERATIONS_DIR}/compare.cpp ${OPERATIONS_DIR}/compare.h
     ${OPERATIONS_DIR}/stack.cpp ${OPERATIONS_DIR}/stack.h
 )
+
 target_link_libraries(operations PUBLIC cpu memory_bus)
 target_include_directories(operations PUBLIC cpu memory_bus)
 
-target_link_libraries(device PUBLIC cpu memory_bus operations)
-target_include_directories(device PUBLIC cpu memory_bus operations)
+target_link_libraries(operations_handler PUBLIC cpu memory_bus operations)
+target_include_directories(operations_handler PUBLIC cpu memory_bus operations)
+
+target_link_libraries(device PUBLIC cpu memory_bus operations_handler)
+target_include_directories(device PUBLIC cpu memory_bus operations_handler)
