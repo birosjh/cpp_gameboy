@@ -17,9 +17,13 @@ enum Register {
     A, B, C, D, E, H, L, F
 };
 
+extern std::unordered_map<Register, std::string> register_names;
+
 enum DoubleRegister {
     BC, DE, HL, SP, PC
 };
+
+extern std::unordered_map<DoubleRegister, std::string> double_register_names;
 
 
 class CPU {

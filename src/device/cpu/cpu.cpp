@@ -2,6 +2,24 @@
 
 #include "cpu.h"
 
+std::unordered_map<Register, std::string> register_names {
+    {A, "A"},
+    {B, "B"},
+    {C, "C"},
+    {D, "D"},
+    {E, "E"},
+    {H, "H"},
+    {L, "L"},
+};
+
+std::unordered_map<DoubleRegister, std::string> double_register_names {
+    {BC, "BC"},
+    {DE, "DE"},
+    {HL, "HL"},
+    {SP, "SP"},
+    {PC, "PC"},
+};
+
 
 // -----------------------------------------------
 // IME Enable and Disable
