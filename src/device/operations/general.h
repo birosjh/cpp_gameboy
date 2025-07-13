@@ -1,3 +1,6 @@
+#ifndef GENERAL_H
+#define GENERAL_H
+
 #include <string>
 #include <cstdint>
 
@@ -41,6 +44,4 @@ namespace EI {
     uint16_t run(CPU& cpu);
 }
 
-namespace PREFIX {
-    uint16_t run(CPU& cpu, MemoryBus& memory_bus, uint8_t value);
-}
+#endif // GENERAL_H

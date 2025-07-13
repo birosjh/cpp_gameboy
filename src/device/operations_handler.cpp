@@ -1,16 +1,4 @@
 #include "operations_handler.h"
-#include "memory_bus.h"
-#include "operations/bool.h"
-#include "operations/compare.h"
-#include "operations/general.h"
-#include "operations/increment.h"
-#include "operations/jump.h"
-#include "operations/math.h"
-#include "operations/rotate.h"
-#include "operations/stack.h"
-#include "operations/load.h"
-#include "operations/compare.h"
-#include "operations/call.h"
 
 
 uint16_t handle_operation(CPU& cpu, MemoryBus& memory_bus, uint8_t code) {
@@ -503,11 +491,12 @@ uint16_t handle_operation(CPU& cpu, MemoryBus& memory_bus, uint8_t code) {
         case 251:
             return EI::run(cpu);
         case 252:
-            CP::to_value(cpu, memory_bus);
+            return CP::to_next_in_memory(cpu, memory_bus);
         case 253:
-            RST::vector(cpu, memory_bus, x38);
+            return RST::vector(cpu, memory_bus, x38);
         default:
             std::cerr << code << " does not exist." << std::endl;
+            return 0;
     }
 }
 
@@ -532,11 +521,14 @@ uint16_t handle_prefixed_operation(CPU& cpu, MemoryBus& memory_bus) {
             RLC::run(cpu, memory_bus, HL);
         case 7:
             RLC::run(cpu, A);
-        case 8:
-        case 9:
-        case 10:
-        case 11:
-        case 12:
-        case 13:
-        case 14:
+        // case 8:
+        // case 9:
+        // case 10:
+        // case 11:
+        // case 12:
+        // case 13:
+        // case 14:
+    }
+
+    return 0;
 }

@@ -179,6 +179,21 @@ uint16_t SUB::value_from_single(CPU& cpu, MemoryBus& memory_bus, Register in_reg
     return cpu.pc() + 1;
 }
 
+uint16_t SBC::from_single(CPU& cpu, MemoryBus& memory_bus, Register in_register, uint16_t address) {
+
+    auto value_from_memory = memory_bus.read_from_memory(address);
+
+    cpu.registers[in_register] = cpu.registers[in_register] - (value_from_memory + cpu.flags[Carry]);
+
+    bool half_carry_occured = (((cpu.registers[in_register] & 0xF) + (value_from_memory & 0xF)) & 0x10) == 0x10;
+
+    cpu.flags[Zero] = cpu.registers[in_register] == 0;
+    cpu.flags[Negative] = true;
+    cpu.flags[HalfCarry] = half_carry_occured;
+
+    return cpu.pc() + 1;
+}
+
 uint16_t SBC::single_registers(CPU& cpu, Register in_register, Register add_register) {
 
     cpu.registers[in_register] = cpu.registers[in_register] - (cpu.registers[add_register] + cpu.flags[Carry]);

@@ -2,7 +2,7 @@
 
 // AND Ops
 
-uint16_t OR::with(CPU& cpu, uint8_t value) {
+uint16_t AND::with(CPU& cpu, uint8_t value) {
 
     cpu.registers[A] = cpu.registers[A] & value;
 

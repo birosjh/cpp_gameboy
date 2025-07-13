@@ -151,7 +151,7 @@ uint16_t LDIO::to_io_single_from_single(CPU& cpu, MemoryBus& memory_bus, Registe
     return cpu.pc() + 1;
 }
 
-uint16_t to_io_address_from_single(CPU& cpu, MemoryBus& memory_bus, Register value_register) {
+uint16_t LDIO::to_io_address_from_single(CPU& cpu, MemoryBus& memory_bus, Register value_register) {
 
     auto io_address = memory_bus.get_next_in_memory(cpu);
 
@@ -164,7 +164,7 @@ uint16_t to_io_address_from_single(CPU& cpu, MemoryBus& memory_bus, Register val
     return cpu.pc() + 1;
 }
 
-uint16_t to_single_from_io_address(CPU& cpu, MemoryBus& memory_bus, Register in_register) {
+uint16_t LDIO::to_single_from_io_address(CPU& cpu, MemoryBus& memory_bus, Register in_register) {
 
     auto io_address = memory_bus.get_next_in_memory(cpu);
 
@@ -175,7 +175,7 @@ uint16_t to_single_from_io_address(CPU& cpu, MemoryBus& memory_bus, Register in_
     return cpu.pc() + 1;
 }
 
-uint16_t to_single_from_io_single(CPU& cpu, MemoryBus& memory_bus, Register in_register, Register io_register) {
+uint16_t LDIO::to_single_from_io_single(CPU& cpu, MemoryBus& memory_bus, Register in_register, Register io_register) {
 
     auto register_value = cpu.registers[io_register];
 

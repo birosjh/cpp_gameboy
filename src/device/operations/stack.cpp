@@ -49,7 +49,7 @@ uint16_t POP::register_pair(CPU& cpu, MemoryBus& memory_bus, Register first, Reg
 
 // RET Operations
 
-int16_t RET::standard(CPU& cpu, MemoryBus& memory_bus) {
+int16_t RET::run(CPU& cpu, MemoryBus& memory_bus) {
 
     auto increment_sp = cpu.sp();
     

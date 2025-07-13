@@ -1,8 +1,6 @@
 #include "compare.h"
 
-uint16_t CP::to_value(CPU& cpu, MemoryBus& memory_bus) {
-
-    auto value = memory_bus.get_next_in_memory(cpu);
+uint16_t CP::to_value(CPU& cpu, uint8_t value) {
 
     auto result = cpu.registers[A] - value;
 
@@ -11,6 +9,15 @@ uint16_t CP::to_value(CPU& cpu, MemoryBus& memory_bus) {
     cpu.flags[Zero] = result == 0;
     cpu.flags[Negative] = true;
     cpu.flags[HalfCarry] = half_carry_occured;
+
+    return cpu.pc() + 1;
+}
+
+uint16_t CP::to_next_in_memory(CPU& cpu, MemoryBus& memory_bus) {
+
+    auto value = memory_bus.get_next_in_memory(cpu);
+
+    CP::to_value(cpu, value);
 
     return cpu.pc() + 1;
 }
