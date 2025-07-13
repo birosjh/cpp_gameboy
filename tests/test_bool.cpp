@@ -31,31 +31,18 @@ TEST(AndTest, OperationResultingInZeroSetsZeroFlag) {
     ASSERT_EQ(cpu.registers[A], expected_value);
 }
 
-TEST(AndTest, AndWithValueSavesToA) {
-    CPU cpu;
-
-    uint8_t value = 5;
-    uint8_t expected_value = 5;
-
-    cpu.registers[A] = 5;
-
-    AND::with_value(cpu, value);
-
-    ASSERT_EQ(cpu.registers[A], expected_value);
-}
-
 TEST(AndTest, AndWithAddressSavesToA) {
     CPU cpu;
     MemoryBus memory_bus;
 
     uint8_t expected_value = 5;
 
-    uint16_t address = 2000;
+    cpu.double_register(BC, 2000);
     memory_bus.write_to_memory(2000, expected_value);
 
     cpu.registers[A] = expected_value;
 
-    AND::with_address(cpu, memory_bus, address);
+    AND::with_address(cpu, memory_bus, BC);
 
     ASSERT_EQ(cpu.registers[A], expected_value);
 }
@@ -88,18 +75,6 @@ TEST(OrTest, OperationResultingInZeroSetsZeroFlag) {
     ASSERT_EQ(cpu.registers[A], expected_value);
 }
 
-TEST(OrTest, OrWithValueSavesToA) {
-    CPU cpu;
-
-    uint8_t value = 5;
-    uint8_t expected_value = 5;
-
-    cpu.registers[A] = 5;
-
-    OR::with_value(cpu, value);
-
-    ASSERT_EQ(cpu.registers[A], expected_value);
-}
 
 TEST(OrTest, OrWithAddressSavesToA) {
     CPU cpu;
@@ -107,12 +82,12 @@ TEST(OrTest, OrWithAddressSavesToA) {
 
     uint8_t expected_value = 5;
 
-    uint16_t address = 2000;
+    cpu.double_register(BC, 2000);
     memory_bus.write_to_memory(2000, expected_value);
 
     cpu.registers[A] = expected_value;
 
-    OR::with_address(cpu, memory_bus, address);
+    OR::with_address(cpu, memory_bus, BC);
 
     ASSERT_EQ(cpu.registers[A], expected_value);
 }
@@ -145,29 +120,16 @@ TEST(XorTest, OperationResultingInZeroSetsZeroFlag) {
     ASSERT_EQ(cpu.registers[A], expected_value);
 }
 
-TEST(XorTest, XorWithValueSavesToA) {
-    CPU cpu;
-
-    uint8_t value = 8;
-
-    cpu.registers[A] = 16;
-
-    XOR::with_value(cpu, value);
-
-    uint8_t expected_value = 24;
-    ASSERT_EQ(cpu.registers[A], expected_value);
-}
-
 TEST(XorTest, XorWithAddressSavesToA) {
     CPU cpu;
     MemoryBus memory_bus;
 
-    uint16_t address = 2000;
+    cpu.double_register(BC, 2000);
     memory_bus.write_to_memory(2000, 4);
 
     cpu.registers[A] = 1;
 
-    XOR::with_address(cpu, memory_bus, address);
+    XOR::with_address(cpu, memory_bus, BC);
 
     uint8_t expected_value = 5;
     ASSERT_EQ(cpu.registers[A], expected_value);

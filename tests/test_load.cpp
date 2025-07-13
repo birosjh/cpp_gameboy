@@ -24,17 +24,18 @@ TEST(LoadTest, CanLoadValueFromAddressIntoSingleRegister) {
 
     memory_bus.write_to_memory(address, value);
     
-    LD::single_from_address(cpu, memory_bus, A, address);
+    LD::single_from_address(cpu, memory_bus, A, BC);
 
     ASSERT_EQ(cpu.registers[A], value);
 }
 
 TEST(LoadTest, CanLoadValueIntoSingleRegister) {
     CPU cpu;
+    MemoryBus memory_bus;
 
     uint8_t value = 92;
     
-    LD::single_from_value(cpu, A, value);
+    LD::single_from_value(cpu, memory_bus, A);
 
     ASSERT_EQ(cpu.registers[A], value);
 }
@@ -48,7 +49,7 @@ TEST(LoadTest, CanLoadValueIntoMemory) {
 
     cpu.registers[D] = value;
     
-    LD::to_address_from_single(cpu, memory_bus, address, D);
+    LD::to_address_from_single(cpu, memory_bus, D);
 
     auto value_in_memory = memory_bus.read_from_memory(address);
 
@@ -57,12 +58,13 @@ TEST(LoadTest, CanLoadValueIntoMemory) {
 
 TEST(LoadTest, CanLoadValueIntoDoubleRegister) {
     CPU cpu;
+    MemoryBus memory_bus;
 
     uint16_t value_one = 92;
     uint16_t value_two = 20000;
     
-    LD::double_from_value(cpu, BC, value_one);
-    LD::double_from_value(cpu, HL, value_two);
+    LD::double_from_value(cpu, memory_bus, BC);
+    LD::double_from_value(cpu, memory_bus, HL);
 
     ASSERT_EQ(cpu.bc(), value_one);
     ASSERT_EQ(cpu.hl(), value_two);

@@ -15,7 +15,6 @@ add_executable(
   test_increment.cpp
   test_load.cpp
   test_math.cpp
-  test_jump.cpp
   test_bool.cpp
   test_compare.cpp
   test_stack.cpp

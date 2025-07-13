@@ -53,7 +53,7 @@ TEST(AddTest, AddressValuesCanBeAddedToRegisters) {
 
     cpu.registers[A] = 10;
 
-    ADD::to_single_using_address(cpu, memory_bus, A, address);
+    ADD::to_single(cpu, memory_bus, A, address);
 
     ASSERT_EQ(cpu.registers[A], 19);
 }
@@ -97,7 +97,7 @@ TEST(AddCarryTest, AddressValuesCanBeAddedToRegistersWithCarry) {
 
     cpu.registers[A] = 10;
 
-    ADC::to_single_using_address(cpu, memory_bus, A, address);
+    ADC::to_single(cpu, memory_bus, A, address);
 
     ASSERT_EQ(cpu.registers[A], 20);
 }
@@ -149,7 +149,7 @@ TEST(SubTest, AddressValuesCanBeSubtractedFromRegisters) {
 
     cpu.registers[A] = 10;
 
-    SUB::from_single_using_address(cpu, memory_bus, A, address);
+    SUB::from_single(cpu, memory_bus, A, address);
 
     ASSERT_EQ(cpu.registers[A], 1);
 }
