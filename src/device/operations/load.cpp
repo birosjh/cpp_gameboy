@@ -2,6 +2,7 @@
 
 #include "load.h"
 #include "increment.h"
+#include "logger.h"
 
 // -----------------------------------------------
 // Load Commands
@@ -107,6 +108,8 @@ uint16_t LD::to_address_from_single(CPU& cpu, MemoryBus& memory_bus, DoubleRegis
 }
 
 uint16_t LD::double_from_value(CPU& cpu, MemoryBus& memory_bus, DoubleRegister in_register) {
+
+    Log::opcode("LD", SP, "n16");
 
     uint8_t right_half = memory_bus.get_next_in_memory(cpu);
     uint8_t left_half = memory_bus.get_next_in_memory(cpu);

@@ -1,5 +1,5 @@
-#include <iomanip>
 #include "device.h"
+#include "logger.h"
 
 Device::Device(Cartridge cartridge) :
     current_game(cartridge),
@@ -13,18 +13,18 @@ Device::Device(Cartridge cartridge) :
 void Device::run() {
     uint8_t code;
 
-    std::cout << "Program Counter: " << cpu.pc() << std::endl;
+    Log::counter(cpu);
 
     code = memory_bus.get_next_in_memory(cpu);
 
     while(code) {
 
-        std::cout << "0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(code) << std::endl;
+        Log::code(code);
 
         // Execute opcode
         auto new_location = execute(code);
 
-        std::cout << "Program Counter: " << cpu.pc() << std::endl;
+        Log::counter(cpu);
 
         // Get next opcode
         code = memory_bus.get_next_in_memory(cpu);
