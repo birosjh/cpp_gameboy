@@ -7,6 +7,9 @@ target_include_directories(cpu PUBLIC cpu)
 add_library(memory_bus STATIC ${CMAKE_CURRENT_SOURCE_DIR}/memory_bus/memory_bus.cpp ${CMAKE_CURRENT_SOURCE_DIR}/memory_bus/memory_bus.h)
 target_include_directories(memory_bus PUBLIC memory_bus cpu)
 
+add_library(logger STATIC ${CMAKE_CURRENT_SOURCE_DIR}/logger/logger.cpp ${CMAKE_CURRENT_SOURCE_DIR}/logger/logger.h)
+target_include_directories(logger PUBLIC cpu)
+
 set(OPERATIONS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/operations)
 add_library(operations STATIC
     ${OPERATIONS_DIR}/general.cpp ${OPERATIONS_DIR}/general.h
@@ -20,11 +23,11 @@ add_library(operations STATIC
     ${OPERATIONS_DIR}/rotate.cpp ${OPERATIONS_DIR}/rotate.h
 )
 
-target_link_libraries(operations PUBLIC cpu memory_bus)
-target_include_directories(operations PUBLIC cpu memory_bus)
+target_link_libraries(operations PUBLIC cpu memory_bus logger)
+target_include_directories(operations PUBLIC cpu memory_bus logger)
 
-target_link_libraries(operations_handler PUBLIC cpu memory_bus operations)
-target_include_directories(operations_handler PUBLIC cpu memory_bus operations)
+target_link_libraries(operations_handler PUBLIC cpu memory_bus operations logger)
+target_include_directories(operations_handler PUBLIC cpu memory_bus operations logger)
 
-target_link_libraries(device PUBLIC cpu memory_bus operations_handler)
-target_include_directories(device PUBLIC cpu memory_bus operations_handler)
+target_link_libraries(device PUBLIC cpu memory_bus operations_handler logger)
+target_include_directories(device PUBLIC cpu memory_bus operations_handler logger)
