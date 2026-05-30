@@ -3,13 +3,15 @@
 
 MemoryBus::MemoryBus() {
 
-    rom.reserve(32767);
+    rom.reserve(65536);
 
     // Load Boot Rom
-    std::ifstream boot_rom("boot/dmg_boot.bin", std::ifstream::in);
-    rom.insert(rom.begin(),
-               std::istream_iterator<char>(boot_rom),
-               std::istream_iterator<char>());
+    std::ifstream boot_rom("boot/dmg_boot.bin", std::ios::in | std::ios::binary);
+    rom.insert(
+        rom.begin(),
+        std::istreambuf_iterator<char>(boot_rom),
+        std::istreambuf_iterator<char>()
+    );
 
 }
 
@@ -27,5 +29,6 @@ uint8_t MemoryBus::get_next_in_memory(CPU& cpu) {
 }
 
 void MemoryBus::write_to_memory(uint16_t location, uint8_t value) {
+    std::cout << location << std::endl;
     rom[location] = value;
 }

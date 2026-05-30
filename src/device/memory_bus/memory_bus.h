@@ -18,8 +18,11 @@ class MemoryBus {
 
     public:
         MemoryBus();
+
         uint8_t read_from_memory(uint16_t location);
+
         uint8_t get_next_in_memory(CPU& cpu);
+
         void write_to_memory(uint16_t location, uint8_t value);
 
 };
